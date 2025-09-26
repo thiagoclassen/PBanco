@@ -1,0 +1,28 @@
+services:
+  client.db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=yourStrong(!)Password
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "yourStrong(!)Password" -Q "SELECT 1" -b -o /dev/null
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    ports:
+      - '1433:1433'
+  client.api:
+    image: client.api
+    build:
+      context: .
+      dockerfile: Services/Clients/Clients.API/Dockerfile
+    ports:
+      - '8080:8080'
+      - '8081:8081'
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Container
+#    depends_on:
+#     client.db:
+#      condition: service_healthy

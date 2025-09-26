@@ -1,0 +1,20 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  client.api:
+    build:
+      context: "C:\\Users\\tgcla\\RiderProjects\\PBanco\\src"
+      dockerfile: "Services/Clients/Clients.API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/Clients.API.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "client.api:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\tgcla\\RiderProjects\\PBanco\\src\\Services\\Clients\\Clients.API:/app:rw"
+    - "C:\\Users\\tgcla\\RiderProjects\\PBanco:/src:rw"
+    - "C:\\Users\\tgcla\\.nuget\\packages:/home/app/.nuget/packages"
+    working_dir: "/app"

@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "70021169-b55d-4d75-903e-b50cc04db763",
+		"name": "PBank",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7845643"
+	},
+	"item": [
+		{
+			"name": "Client",
+			"item": [
+				{
+					"name": "CreateClient",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":\"John Doe\",\r\n    \"Email\":\"johndoe@gmail.com\",\r\n    \"CPF\":\"111.111.111-99\",\r\n    \"BirthDate\":\"2000-09-26T20:21:48.791Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{url}}:{{clientApiPort}}/api/clients",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{clientApiPort}}",
+							"path": [
+								"api",
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetClient",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{clientApiPort}}/api/clients/1e4130cc-7e57-41ab-aa8c-e2d644df8212",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{clientApiPort}}",
+							"path": [
+								"api",
+								"clients",
+								"1e4130cc-7e57-41ab-aa8c-e2d644df8212"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateClient",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":\"John Doe da silva\",\r\n    \"Email\":\"johndoe@hotmail.com\"    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{url}}:{{clientApiPort}}/api/clients/a1295803-337b-4c8c-a2f4-2eeae176a710",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{clientApiPort}}",
+							"path": [
+								"api",
+								"clients",
+								"a1295803-337b-4c8c-a2f4-2eeae176a710"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteClient",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{clientApiPort}}/api/clients/1e4130cc-7e57-41ab-aa8c-e2d644df8212",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{clientApiPort}}",
+							"path": [
+								"api",
+								"clients",
+								"1e4130cc-7e57-41ab-aa8c-e2d644df8212"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

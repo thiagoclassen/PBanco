@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{07748A1F-AE89-4090-8F22-BDF34D0FDF48}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{841E8D7F-5C7E-40B1-A72C-48A7D6BE48F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{525F97B6-8EEA-4D3A-8E23-7689971A6098}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks", "src\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj", "{C94A649C-BA4F-400D-A2CE-B64CC534B843}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clients.API", "src\Services\Clients\Clients.API\Clients.API.csproj", "{22F24214-B349-48BA-8DFC-70F71BBAA659}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{508CB2A8-DD1E-445C-BE81-A275E3FDA57F}"
+	ProjectSection(SolutionItems) = preProject
+		src\compose.override.yaml = src\compose.override.yaml
+		src\compose.yaml = src\compose.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1D00907F-BB71-49B9-9924-1D9448FFB321}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{368BB2AB-0C5E-4F90-9EFD-F19D419EBFED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{D0BF360D-D85A-4005-826B-8A894858DB82}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{1557480F-BA89-435B-94B3-0E2F2B519B8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clients.API.UnitTesting", "test\Services\Clients\Clients.API.UnitTesting\Clients.API.UnitTesting.csproj", "{8A70E7A8-DF2A-4391-8B8C-BF708D05CE26}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C94A649C-BA4F-400D-A2CE-B64CC534B843}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C94A649C-BA4F-400D-A2CE-B64CC534B843}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C94A649C-BA4F-400D-A2CE-B64CC534B843}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C94A649C-BA4F-400D-A2CE-B64CC534B843}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22F24214-B349-48BA-8DFC-70F71BBAA659}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22F24214-B349-48BA-8DFC-70F71BBAA659}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22F24214-B349-48BA-8DFC-70F71BBAA659}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22F24214-B349-48BA-8DFC-70F71BBAA659}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A70E7A8-DF2A-4391-8B8C-BF708D05CE26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A70E7A8-DF2A-4391-8B8C-BF708D05CE26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A70E7A8-DF2A-4391-8B8C-BF708D05CE26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A70E7A8-DF2A-4391-8B8C-BF708D05CE26}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{841E8D7F-5C7E-40B1-A72C-48A7D6BE48F6} = {07748A1F-AE89-4090-8F22-BDF34D0FDF48}
+		{C94A649C-BA4F-400D-A2CE-B64CC534B843} = {525F97B6-8EEA-4D3A-8E23-7689971A6098}
+		{22F24214-B349-48BA-8DFC-70F71BBAA659} = {841E8D7F-5C7E-40B1-A72C-48A7D6BE48F6}
+		{525F97B6-8EEA-4D3A-8E23-7689971A6098} = {1D00907F-BB71-49B9-9924-1D9448FFB321}
+		{07748A1F-AE89-4090-8F22-BDF34D0FDF48} = {1D00907F-BB71-49B9-9924-1D9448FFB321}
+		{D0BF360D-D85A-4005-826B-8A894858DB82} = {368BB2AB-0C5E-4F90-9EFD-F19D419EBFED}
+		{1557480F-BA89-435B-94B3-0E2F2B519B8C} = {D0BF360D-D85A-4005-826B-8A894858DB82}
+		{8A70E7A8-DF2A-4391-8B8C-BF708D05CE26} = {1557480F-BA89-435B-94B3-0E2F2B519B8C}
+	EndGlobalSection
+EndGlobal
