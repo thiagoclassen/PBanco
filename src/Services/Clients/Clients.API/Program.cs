@@ -1,47 +1,37 @@
-using BuildingBlocks.Behaviors;
-using BuildingBlocks.Exceptions.Handler;
-using Clients.API.Client;
-using Clients.API.Client.Interfaces;
-using Clients.API.Client.Persistence;
+using Clients.API;
 using Clients.API.Data;
-using FluentValidation;
+using Clients.API.Messages;
+using Clients.API.Outbox.Extension;
+using Hangfire;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 // Services container.
 
+builder.Services
+    .AddPresentation()
+    .AddInfrastructure()
+    .AddApplication();
 
-builder.Services.AddDbContext<ClientDbContext>(options =>
+builder.Services.AddMassTransit(config =>
 {
-    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+    config.SetKebabCaseEndpointNameFormatter();
+    
+    config.UsingRabbitMq((ctx, cfg) =>
     {
-        options.UseSqlServer(
-            "Server=localhost,1433;Database=Bank;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=Yes");
-    }
-
-    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Container")
-    {
-        options.UseSqlServer(
-            "Server=client.db,1433;Database=Bank;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=Yes");
-    }
+        
+        cfg.Host(builder.Configuration["EventBus:HostAddress"], h =>
+        {
+            h.Username(builder.Configuration["EventBus:UserName"]!);
+            h.Password(builder.Configuration["EventBus:Password"]!);
+        });
+        
+        cfg.ConfigureEndpoints(ctx);
+    });
 });
 
-builder.Services.AddScoped<IClientRepository, ClientRepository>();
-
-builder.Services.AddMediatR(options =>
-{
-    options.AddOpenBehavior(typeof(ValidationBehavior<,>));
-    options.RegisterServicesFromAssembly(typeof(Program).Assembly);
-});
-
-builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
-
-builder.Services.AddControllers();
-
-builder.Services.AddSwaggerGen();
-builder.Services.AddEndpointsApiExplorer();
-
-// builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+builder.Services.AddScoped<MessageService>();
 
 var app = builder.Build();
 // HTTP request pipeline.
@@ -55,6 +45,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseHangfireDashboard(options: new DashboardOptions { Authorization = [], DarkModeEnabled = true });
+app.UseBackgroundJobs();
 
 app.UseExceptionHandler("/error");
 

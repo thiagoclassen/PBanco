@@ -1,5 +1,5 @@
 ﻿using BuildingBlocks.CQRS;
-using Clients.API.Client.Interfaces;
+using Clients.API.Client.Persistence;
 using Clients.API.Models;
 
 

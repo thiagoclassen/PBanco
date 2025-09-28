@@ -4,6 +4,7 @@ using Clients.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clients.API.Data.Migrations
 {
     [DbContext(typeof(ClientDbContext))]
-    partial class ClientDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250927203410_OutBox")]
+    partial class OutBox
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,7 +88,7 @@ namespace Clients.API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OutboxMessages", "messaging");
+                    b.ToTable("OutboxMessages");
                 });
 #pragma warning restore 612, 618
         }

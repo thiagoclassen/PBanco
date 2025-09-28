@@ -2,11 +2,9 @@
 using Clients.API.Models;
 using ErrorOr;
 using FluentAssertions;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
 
 namespace Clients.API.UnitTesting.Client.CreateClient;
 
@@ -68,7 +66,7 @@ public class CreateClientEndpointTest
             BirthDate = new DateTime()
         };
 
-        var createClientResult = new CreateClientResult(Guid.NewGuid());
+        //var createClientResult = new CreateClientResult(Guid.NewGuid());
 
         _sender.Send(Arg.Any<CreateClientCommand>(), Arg.Any<CancellationToken>())
             .Returns(Error.Validation().ToErrorOr<BankClient>());

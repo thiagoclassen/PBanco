@@ -1,16 +1,32 @@
 services:
+  pbanco.queue:
+    image: rabbitmq:management-alpine
+    volumes:
+      - ./rabbitmqdata:/var/lib/rabbitmq
+      - ./rabbitmqlogs:/var/log/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   client.db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     restart: always
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=yourStrong(!)Password
-    healthcheck:
-      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "yourStrong(!)Password" -Q "SELECT 1" -b -o /dev/null
-      interval: 10s
-      timeout: 3s
-      retries: 10
-      start_period: 10s
+#    healthcheck:
+#      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "yourStrong(!)Password" -Q "SELECT 1" -b -o /dev/null
+#      interval: 10s
+#      timeout: 3s
+#      retries: 10
+#      start_period: 10s
     ports:
       - '1433:1433'
   client.api:
@@ -23,6 +39,12 @@ services:
       - '8081:8081'
     environment:
       - ASPNETCORE_ENVIRONMENT=Container
+      - EventBus__HostAddress=rabbitmq://pbanco.queue:5672
+      - EventBus__UserName=guest
+      - EventBus__Password=guest
+    depends_on:
+      pbanco.queue:
+        condition: service_healthy
 #    depends_on:
 #     client.db:
 #      condition: service_healthy

@@ -6,6 +6,7 @@ namespace Clients.API.Data;
 public class ClientDbContext : DbContext
 {
     public DbSet<BankClient> Clients { get; init; }
+    public DbSet<OutboxMessage> OutboxMessages { get; init; }
 
     public ClientDbContext()
     {
@@ -45,7 +46,7 @@ public class ClientDbContext : DbContext
     private void UpdateAtTimestamps()
     {
         var modifiedEntities = ChangeTracker.Entries()
-            .Where(e => e.State == EntityState.Modified);
+            .Where(e => e.State == EntityState.Modified && e.Metadata.GetProperties().Any(p => p.Name == "UpdatedAt"));
 
         foreach (var entity in modifiedEntities)
         {

@@ -1,5 +1,5 @@
 ﻿using BuildingBlocks.CQRS;
-using Clients.API.Client.Interfaces;
+using Clients.API.Client.Persistence;
 using FluentValidation;
 
 namespace Clients.API.Client.UpdateClient;
@@ -33,10 +33,10 @@ public class UpdateClientCommandHandler(IClientRepository repository)
         if (client is null) 
             return Error.NotFound(description: $"Client with ID not found.");
 
-        client!.Name = command.Name ?? client.Name;
-        client!.CPF = command.CPF ?? client.CPF;
-        client!.Email = command.Email ?? client.Email;
-        client!.BirthDate = command.BirthDate ?? client.BirthDate;
+        client.Name = command.Name ?? client.Name;
+        client.CPF = command.CPF ?? client.CPF;
+        client.Email = command.Email ?? client.Email;
+        client.BirthDate = command.BirthDate ?? client.BirthDate;
 
         await repository.UpdateAsync(client, cancellationToken);
 

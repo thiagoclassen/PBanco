@@ -1,6 +1,6 @@
 ﻿using Clients.API.Models;
 
-namespace Clients.API.Client.Interfaces;
+namespace Clients.API.Client.Persistence;
 
 public interface IClientRepository
 {

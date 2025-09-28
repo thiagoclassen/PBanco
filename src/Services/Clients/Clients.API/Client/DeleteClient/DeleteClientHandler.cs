@@ -1,6 +1,5 @@
 ﻿using BuildingBlocks.CQRS;
-using Clients.API.Client.Interfaces;
-using ErrorOr;
+using Clients.API.Client.Persistence;
 
 namespace Clients.API.Client.DeleteClient;
 

@@ -1,5 +1,4 @@
-﻿using Clients.API.Client.Interfaces;
-using Clients.API.Data;
+﻿using Clients.API.Data;
 using Clients.API.Models;
 
 namespace Clients.API.Client.Persistence;
