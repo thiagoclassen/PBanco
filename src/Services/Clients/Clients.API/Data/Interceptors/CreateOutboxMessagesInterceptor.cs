@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
-using Clients.API.Models;
+using Clients.API.Client.Models;
+using Clients.API.Outbox.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 

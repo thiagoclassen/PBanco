@@ -1,7 +1,7 @@
 ﻿using Clients.API.Client.CreateClient;
 using Clients.API.Client.GetClient;
+using Clients.API.Client.Models;
 using Clients.API.Client.UpdateClient;
-using Clients.API.Models;
 
 namespace Clients.API.Client;
 

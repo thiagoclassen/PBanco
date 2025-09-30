@@ -1,6 +1,6 @@
-﻿namespace Clients.API.Client.Events;
+﻿namespace BuildingBlocks.Events;
 
-public record ClientCreated
+public class ClientCreated
 {
     public Guid Id { get; init; }
     public DateTime Created { get; init; }

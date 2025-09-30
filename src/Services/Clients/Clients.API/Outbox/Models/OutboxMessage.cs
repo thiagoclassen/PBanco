@@ -1,4 +1,4 @@
-﻿namespace Clients.API.Models;
+﻿namespace Clients.API.Outbox.Models;
 
 public class OutboxMessage
 {

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
+using Clients.API.Client.Models;
 using Clients.API.Data;
 using Clients.API.Messages;
-using Clients.API.Models;
 
 namespace Clients.API.Outbox.Job;
 

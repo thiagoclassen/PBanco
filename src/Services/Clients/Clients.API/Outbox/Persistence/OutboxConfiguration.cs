@@ -1,4 +1,4 @@
-﻿using Clients.API.Models;
+﻿using Clients.API.Outbox.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

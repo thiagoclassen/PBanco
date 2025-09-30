@@ -48,3 +48,35 @@ services:
 #    depends_on:
 #     client.db:
 #      condition: service_healthy
+  proposal.api:
+    image: proposal.api
+    build:
+      context: .
+      dockerfile: Services/Proposal/Proposal.API/Dockerfile
+    ports:
+      - '8090:8090'
+      - '8091:8091'
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Container
+      - EventBus__HostAddress=rabbitmq://pbanco.queue:5672
+      - EventBus__UserName=guest
+      - EventBus__Password=guest
+      - ASPNETCORE_URLS=http://+:8090;http://+:8091      
+    depends_on:
+      pbanco.queue:
+        condition: service_healthy
+  proposal.db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=yourStrong(!)Password
+      - MSSQL_TCP_PORT=1443
+    #    healthcheck:
+    #      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "yourStrong(!)Password" -Q "SELECT 1" -b -o /dev/null
+    #      interval: 10s
+    #      timeout: 3s
+    #      retries: 10
+    #      start_period: 10s
+    ports:
+      - '1443:1443'

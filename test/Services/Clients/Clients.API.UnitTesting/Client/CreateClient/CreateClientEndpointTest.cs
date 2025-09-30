@@ -1,5 +1,5 @@
 ﻿using Clients.API.Client.CreateClient;
-using Clients.API.Models;
+using Clients.API.Client.Models;
 using ErrorOr;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

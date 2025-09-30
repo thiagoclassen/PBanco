@@ -1,6 +1,6 @@
 ﻿using BuildingBlocks.CQRS;
+using Clients.API.Client.Models;
 using Clients.API.Client.Persistence;
-using Clients.API.Models;
 using FluentValidation;
 
 namespace Clients.API.Client.CreateClient;

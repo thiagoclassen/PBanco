@@ -2,10 +2,12 @@
 using Clients.API.Client.Persistence;
 using Clients.API.Data;
 using Clients.API.Data.Interceptors;
+using Clients.API.Messages;
 using Clients.API.Outbox.Job;
 using Clients.API.Outbox.Persistence;
 using FluentValidation;
 using Hangfire;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clients.API;
@@ -55,8 +57,10 @@ public static class DependencyInjection
         });
 
         services.AddHangfire();
+        services.AddMassTransitLib(services.BuildServiceProvider().GetRequiredService<IConfiguration>());
         
         services.AddScoped<UnitOfWork>();
+        services.AddScoped<MessageService>();
         services.AddScoped<IClientRepository, ClientRepository>();
         services.AddScoped<IOutboxRepository, OutboxRepository>();
         
@@ -76,5 +80,27 @@ public static class DependencyInjection
         services.AddScoped<IProcessOutboxJob, ProcessOutboxJob>();
         return services;
     } 
+    
+    private static IServiceCollection AddMassTransitLib(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddMassTransit(config =>
+        {
+            config.SetKebabCaseEndpointNameFormatter();
+    
+            config.UsingRabbitMq((ctx, cfg) =>
+            {
+        
+                cfg.Host(configuration["EventBus:HostAddress"], h =>
+                {
+                    h.Username(configuration["EventBus:UserName"]!);
+                    h.Password(configuration["EventBus:Password"]!);
+                });
+        
+                cfg.ConfigureEndpoints(ctx);
+            });
+        });
+        
+        return services;
+    }
     
 }

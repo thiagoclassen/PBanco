@@ -14,24 +14,7 @@ builder.Services
     .AddInfrastructure()
     .AddApplication();
 
-builder.Services.AddMassTransit(config =>
-{
-    config.SetKebabCaseEndpointNameFormatter();
-    
-    config.UsingRabbitMq((ctx, cfg) =>
-    {
-        
-        cfg.Host(builder.Configuration["EventBus:HostAddress"], h =>
-        {
-            h.Username(builder.Configuration["EventBus:UserName"]!);
-            h.Password(builder.Configuration["EventBus:Password"]!);
-        });
-        
-        cfg.ConfigureEndpoints(ctx);
-    });
-});
 
-builder.Services.AddScoped<MessageService>();
 
 var app = builder.Build();
 // HTTP request pipeline.

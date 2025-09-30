@@ -1,4 +1,4 @@
-﻿using Clients.API.Models;
+﻿using Clients.API.Client.Models;
 
 namespace Clients.API.Client.Persistence;
 

@@ -1,11 +1,11 @@
 ﻿using BuildingBlocks.CQRS;
+using Clients.API.Client.Models;
 using Clients.API.Client.Persistence;
-using Clients.API.Models;
 
 
 namespace Clients.API.Client.GetClient;
 
-public record GetClientQuery(Guid ClientId) : ICommand<ErrorOr<BankClient?>>;
+public record GetClientQuery(Guid ClientId) : IQuery<ErrorOr<BankClient?>>;
 
 public record GetClientResult(
     Guid Id,
@@ -16,7 +16,7 @@ public record GetClientResult(
     DateTime CreatedAt,
     DateTime UpdateAt);
 
-public class GetClientHandler(IClientRepository repository) : ICommandHandler<GetClientQuery, ErrorOr<BankClient?>>
+public class GetClientHandler(IClientRepository repository) : IQueryHandler<GetClientQuery, ErrorOr<BankClient?>>
 {
     public async Task<ErrorOr<BankClient?>> Handle(GetClientQuery query, CancellationToken cancellationToken)
     {

@@ -1,5 +1,5 @@
-﻿using Clients.API.Data;
-using Clients.API.Models;
+﻿using Clients.API.Client.Models;
+using Clients.API.Data;
 
 namespace Clients.API.Client.Persistence;
 

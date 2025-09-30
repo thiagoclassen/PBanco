@@ -1,4 +1,4 @@
-﻿using Clients.API.Models;
+﻿using Clients.API.Outbox.Models;
 
 namespace Clients.API.Outbox.Persistence;
 

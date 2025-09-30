@@ -1,4 +1,4 @@
-﻿namespace Clients.API.Models;
+﻿namespace Clients.API.Client.Models;
 
 public class BankClient
 {

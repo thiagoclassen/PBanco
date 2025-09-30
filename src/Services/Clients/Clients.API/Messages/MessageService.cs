@@ -1,4 +1,4 @@
-﻿using Clients.API.Client.Events;
+﻿using BuildingBlocks.Events;
 using MassTransit;
 
 namespace Clients.API.Messages;
