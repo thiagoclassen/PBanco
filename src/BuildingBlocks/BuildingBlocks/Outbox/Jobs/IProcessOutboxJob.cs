@@ -1,4 +1,4 @@
-﻿namespace Clients.API.Outbox.Job;
+﻿namespace BuildingBlocks.Outbox.Jobs;
 
 public interface IProcessOutboxJob
 {

@@ -1,5 +1,5 @@
-﻿using Clients.API.Data;
-using Clients.API.Outbox.Models;
+﻿using BuildingBlocks.Outbox.Models;
+using Clients.API.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clients.API.Outbox.Persistence;

@@ -1,4 +1,4 @@
-﻿using BuildingBlocks.Events;
+﻿using BuildingBlocks.Events.Client;
 using MassTransit;
 using MediatR;
 using ProposalApi.Proposal.CreateProposal;

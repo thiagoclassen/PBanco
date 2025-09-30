@@ -1,14 +1,16 @@
 ﻿using BuildingBlocks.Behaviors;
+using BuildingBlocks.Events.Client;
+using BuildingBlocks.Outbox;
+using BuildingBlocks.Outbox.Interceptor;
+using BuildingBlocks.Outbox.Persistence;
 using Clients.API.Client.Persistence;
 using Clients.API.Data;
-using Clients.API.Data.Interceptors;
-using Clients.API.Messages;
-using Clients.API.Outbox.Job;
-using Clients.API.Outbox.Persistence;
+using Clients.API.Outbox.Jobs;
 using FluentValidation;
 using Hangfire;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using IProcessOutboxJob = BuildingBlocks.Outbox.Jobs.IProcessOutboxJob;
 
 namespace Clients.API;
 
@@ -21,7 +23,7 @@ public static class DependencyInjection
         services.AddSwaggerGen();
         return services;
     }
-    
+
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(options =>
@@ -29,12 +31,12 @@ public static class DependencyInjection
             options.AddOpenBehavior(typeof(ValidationBehavior<,>));
             options.RegisterServicesFromAssembly(typeof(Program).Assembly);
         });
-        
+
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
-        
+
         return services;
     }
-    
+
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddSingleton<CreateOutboxMessagesInterceptor>();
@@ -58,12 +60,11 @@ public static class DependencyInjection
 
         services.AddHangfire();
         services.AddMassTransitLib(services.BuildServiceProvider().GetRequiredService<IConfiguration>());
-        
-        services.AddScoped<UnitOfWork>();
-        services.AddScoped<MessageService>();
+
+        services.AddScoped<UnitOfWork<ClientDbContext>>();
         services.AddScoped<IClientRepository, ClientRepository>();
-        services.AddScoped<IOutboxRepository, OutboxRepository>();
-        
+        services.AddScoped<IOutboxRepository, OutboxRepository<ClientDbContext>>();
+
         return services;
     }
 
@@ -79,28 +80,31 @@ public static class DependencyInjection
 
         services.AddScoped<IProcessOutboxJob, ProcessOutboxJob>();
         return services;
-    } 
-    
+    }
+
     private static IServiceCollection AddMassTransitLib(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMassTransit(config =>
         {
             config.SetKebabCaseEndpointNameFormatter();
-    
+
             config.UsingRabbitMq((ctx, cfg) =>
             {
-        
                 cfg.Host(configuration["EventBus:HostAddress"], h =>
                 {
                     h.Username(configuration["EventBus:UserName"]!);
                     h.Password(configuration["EventBus:Password"]!);
                 });
-        
+
                 cfg.ConfigureEndpoints(ctx);
+
+                cfg.Message<ClientCreated>(x => x.SetEntityName("client-created"));
+
+                cfg.UseJsonSerializer();
+                cfg.UseJsonDeserializer();
             });
         });
-        
+
         return services;
     }
-    
 }

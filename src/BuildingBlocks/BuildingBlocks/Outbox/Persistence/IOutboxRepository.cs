@@ -1,6 +1,6 @@
 ﻿using BuildingBlocks.Outbox.Models;
 
-namespace Clients.API.Outbox.Persistence;
+namespace BuildingBlocks.Outbox.Persistence;
 
 public interface IOutboxRepository
 {

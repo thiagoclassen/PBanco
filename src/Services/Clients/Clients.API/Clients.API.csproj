@@ -30,6 +30,34 @@
       <Content Include="..\..\..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+      <Content Remove="Data\Interceptors\**" />
+      <Content Remove="Outbox\Models\**" />
+      <Content Remove="Outbox\Extension\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Data\Interceptors\CreateOutboxMessagesInterceptor.cs" />
+      <Compile Remove="Outbox\Models\OutboxMessage.cs" />
+      <Compile Remove="Data\UnitOfWork.cs" />
+      <Compile Remove="Data\Interceptors\**" />
+      <Compile Remove="Outbox\Models\**" />
+      <Compile Remove="Outbox\Extension\**" />
+      <Compile Remove="Outbox\Job\IProcessOutboxJob.cs" />
+      <Compile Remove="Outbox\Persistence\IOutboxRepository.cs" />
+      <Compile Remove="Outbox\Persistence\OutboxRepository.cs" />
+      <Compile Remove="Outbox\Jobs\IProcessOutboxJob.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Data\Interceptors\**" />
+      <EmbeddedResource Remove="Outbox\Models\**" />
+      <EmbeddedResource Remove="Outbox\Extension\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Data\Interceptors\**" />
+      <None Remove="Outbox\Models\**" />
+      <None Remove="Outbox\Extension\**" />
     </ItemGroup>
 
 </Project>

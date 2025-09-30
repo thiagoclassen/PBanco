@@ -1,11 +1,9 @@
 ﻿using System.Text.Json;
 using BuildingBlocks.Domain;
-using Clients.API.Client.Models;
-using Clients.API.Outbox.Models;
-using Microsoft.EntityFrameworkCore;
+using BuildingBlocks.Outbox.Models;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace Clients.API.Data.Interceptors;
+namespace BuildingBlocks.Outbox.Interceptor;
 
 public sealed class CreateOutboxMessagesInterceptor : SaveChangesInterceptor
 {

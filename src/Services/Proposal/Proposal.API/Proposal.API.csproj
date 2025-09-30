@@ -33,4 +33,9 @@
       <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Outbox\Jobs\" />
+      <Folder Include="Outbox\Persistence\" />
+    </ItemGroup>
+
 </Project>

@@ -1,13 +1,14 @@
-﻿using System.Text.Json;
-using Clients.API.Client.Models;
+﻿using BuildingBlocks.Events;
+using BuildingBlocks.Outbox;
+using BuildingBlocks.Outbox.Jobs;
 using Clients.API.Data;
-using Clients.API.Messages;
+using MassTransit;
 
-namespace Clients.API.Outbox.Job;
+namespace Clients.API.Outbox.Jobs;
 
 internal sealed class ProcessOutboxJob(
-    UnitOfWork unitOfWork,
-    MessageService messageService,
+    UnitOfWork<ClientDbContext> unitOfWork,
+    IPublishEndpoint publishEndpoint,
     ILogger<ProcessOutboxJob> logger
 ) : IProcessOutboxJob
 {
@@ -24,13 +25,17 @@ internal sealed class ProcessOutboxJob(
 
         await Task.WhenAll(messages.Select(async message =>
         {
-            var client = JsonSerializer.Deserialize<BankClient>(message.Message);
-            await messageService.PublishClientCreated(client!.Id);
+            // Convert to concrete type otherwise the consumers will not be able to handle it
+            var domainEvent = EventMapper.GetConcreteType(message.Type, message.Message);
+            if (domainEvent is null) return;
+            
+            await publishEndpoint.Publish(domainEvent, cancellationToken);
+
             message.ProcessedOn = DateTime.UtcNow;
         }));
-        
+
         unitOfWork.Outbox.MarkAsProcessed(messages);
-        
+
         await unitOfWork.CommitAsync();
 
         logger.LogInformation("===> Finishing ProcessAsync/Transaction");

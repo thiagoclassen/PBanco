@@ -1,8 +1,8 @@
-﻿using Clients.API.Outbox.Persistence;
+﻿using BuildingBlocks.Outbox.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Clients.API.Data;
+namespace BuildingBlocks.Outbox;
 
 public class UnitOfWork<TContext>(
     TContext context,

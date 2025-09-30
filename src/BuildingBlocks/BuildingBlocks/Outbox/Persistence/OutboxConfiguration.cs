@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Clients.API.Outbox.Persistence;
+namespace BuildingBlocks.Outbox.Persistence;
 
 public class OutboxConfiguration : IEntityTypeConfiguration<OutboxMessage>
 {

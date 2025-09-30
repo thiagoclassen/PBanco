@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Behaviors;
+using BuildingBlocks.Events.Client;
 using FluentValidation;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -81,7 +82,13 @@ public static class DependencyInjection
                 {
                     r.Interval(3, TimeSpan.FromSeconds(10));
                 });
+                
+                cfg.Message<ClientCreated>(x => x.SetEntityName("client-created"));
+                
+                cfg.UseJsonSerializer();
+                cfg.UseJsonDeserializer();
             });
+            
         });
         
         return services;
