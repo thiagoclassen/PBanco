@@ -1,3 +1,4 @@
+using BuildingBlocks.Outbox.Extensions;
 using Microsoft.EntityFrameworkCore;
 using ProposalApi;
 using ProposalApi.Data;
@@ -21,6 +22,6 @@ context.Database.Migrate();
 app.UseExceptionHandler("/error");
 
 app.MapControllers();
-
+app.UseBackgroundJobs();
 
 app.Run();

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BuildingBlocks.Outbox.Models;
+using Microsoft.EntityFrameworkCore;
 using ProposalApi.Proposal.Model;
 
 namespace ProposalApi.Data;
@@ -6,6 +7,7 @@ namespace ProposalApi.Data;
 public class ProposalDbContext : DbContext
 {
     public DbSet<Proposal.Models.Proposal> Proposals { get; init; }
+    public DbSet<OutboxMessage> OutboxMessages { get; init; }
     
     public ProposalDbContext()
     {

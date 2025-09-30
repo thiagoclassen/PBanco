@@ -15,7 +15,7 @@ services:
     - "--mode=server"
     - "--frontend-port=57000"
     - "--backend-port=57200"
-    - "--roslyn-worker-port=57494"
+    - "--roslyn-worker-port=57504"
     - "--timeout=60"
     environment:
       DOTNET_USE_POLLING_FILE_WATCHER: "true"
@@ -23,9 +23,9 @@ services:
       RESHARPER_LOG_CONF: "/etc/opt/JetBrains/RiderDebuggerTools/backend-log.xml"
     image: "client.api:dev"
     ports:
-    - "127.0.0.1:61525:57000"
-    - "127.0.0.1:57294:57200"
-    - "127.0.0.1:57494:57494"
+    - "127.0.0.1:64036:57000"
+    - "127.0.0.1:57304:57200"
+    - "127.0.0.1:57504:57504"
     volumes:
     - "C:\\Users\\tgcla\\RiderProjects\\PBanco\\src\\Services\\Clients\\Clients.API:/app:rw"
     - "C:\\Users\\tgcla\\RiderProjects\\PBanco:/src:rw"
@@ -34,7 +34,7 @@ services:
       Linux64:/opt/JetBrains/RiderDebuggerTools"
     - "C:\\Users\\tgcla\\AppData\\Local\\Programs\\Rider\\bin\\backend-log.xml:/etc/opt/JetBrains/RiderDebuggerTools/backend-log.xml"
     - "C:\\Users\\tgcla\\AppData\\Local\\JetBrains\\Rider2025.2\\log\\DebuggerWorker\\\
-      JetBrains.Debugger.Worker.2025_9_30_03_54_59:/var/opt/JetBrains/RiderDebuggerTools:rw"
+      JetBrains.Debugger.Worker.2025_9_30_04_36_18:/var/opt/JetBrains/RiderDebuggerTools:rw"
     working_dir: "/app"
   proposal.api:
     build:
@@ -51,7 +51,7 @@ services:
     - "--mode=server"
     - "--frontend-port=57000"
     - "--backend-port=57200"
-    - "--roslyn-worker-port=57495"
+    - "--roslyn-worker-port=57505"
     - "--timeout=60"
     environment:
       DOTNET_USE_POLLING_FILE_WATCHER: "true"
@@ -59,9 +59,9 @@ services:
       RESHARPER_LOG_CONF: "/etc/opt/JetBrains/RiderDebuggerTools/backend-log.xml"
     image: "proposal.api:dev"
     ports:
-    - "127.0.0.1:61526:57000"
-    - "127.0.0.1:57295:57200"
-    - "127.0.0.1:57495:57495"
+    - "127.0.0.1:64037:57000"
+    - "127.0.0.1:57305:57200"
+    - "127.0.0.1:57505:57505"
     volumes:
     - "C:\\Users\\tgcla\\RiderProjects\\PBanco\\src\\Services\\Proposal\\Proposal.API:/app:rw"
     - "C:\\Users\\tgcla\\RiderProjects\\PBanco:/src:rw"
@@ -70,5 +70,5 @@ services:
       Linux64:/opt/JetBrains/RiderDebuggerTools"
     - "C:\\Users\\tgcla\\AppData\\Local\\Programs\\Rider\\bin\\backend-log.xml:/etc/opt/JetBrains/RiderDebuggerTools/backend-log.xml"
     - "C:\\Users\\tgcla\\AppData\\Local\\JetBrains\\Rider2025.2\\log\\DebuggerWorker\\\
-      JetBrains.Debugger.Worker.2025_9_30_03_54_59:/var/opt/JetBrains/RiderDebuggerTools:rw"
+      JetBrains.Debugger.Worker.2025_9_30_04_36_18:/var/opt/JetBrains/RiderDebuggerTools:rw"
     working_dir: "/app"

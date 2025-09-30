@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProposalApi.Data;
 
@@ -11,9 +12,11 @@ using ProposalApi.Data;
 namespace ProposalApi.Data.Migrations
 {
     [DbContext(typeof(ProposalDbContext))]
-    partial class ProposalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250930071630_zxczcx")]
+    partial class zxczcx
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,10 +1,16 @@
 ﻿using BuildingBlocks.Behaviors;
 using BuildingBlocks.Events.Client;
+using BuildingBlocks.Outbox;
+using BuildingBlocks.Outbox.Interceptor;
+using BuildingBlocks.Outbox.Jobs;
+using BuildingBlocks.Outbox.Persistence;
 using FluentValidation;
+using Hangfire;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using ProposalApi.Consumer;
 using ProposalApi.Data;
+using ProposalApi.Outbox.Jobs;
 using ProposalApi.Proposal.Persistence;
 
 namespace ProposalApi;
@@ -33,9 +39,10 @@ public static class DependencyInjection
     
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
+        services.AddSingleton<CreateOutboxMessagesInterceptor>();
         services.AddDbContext<ProposalDbContext>((serviceProvider, options) =>
         {
-            //options.AddInterceptors(serviceProvider.GetRequiredService<CreateOutboxMessagesInterceptor>());
+            options.AddInterceptors(serviceProvider.GetRequiredService<CreateOutboxMessagesInterceptor>());
 
             //TODO - move connection string to configuration/env
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
@@ -51,9 +58,12 @@ public static class DependencyInjection
             }
         });
 
-        services.AddScoped<IProposalRepository, ProposalRepository>();
-        
         services.AddMassTransitLib(services.BuildServiceProvider().GetRequiredService<IConfiguration>());
+        services.AddHangfire();
+        
+        services.AddScoped<UnitOfWork<ProposalDbContext>>();
+        services.AddScoped<IProposalRepository, ProposalRepository>();
+        services.AddScoped<IOutboxRepository, OutboxRepository<ProposalDbContext>>();
         
         return services;
     }
@@ -91,6 +101,20 @@ public static class DependencyInjection
             
         });
         
+        return services;
+    }
+    
+    private static IServiceCollection AddHangfire(this IServiceCollection services)
+    {
+        services.AddHangfire(configuration =>
+        {
+            configuration.UseSqlServerStorage(
+                "Server=proposal.db,1443;Database=Proposals;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=Yes");
+        });
+
+        services.AddHangfireServer(options => options.SchedulePollingInterval = TimeSpan.FromSeconds(1));
+
+        services.AddScoped<IProcessOutboxJob, ProcessOutboxJob>();
         return services;
     }
 }
