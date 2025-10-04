@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using BuildingBlocks.Domain;
 using Clients.API.Client.Models;
 using Clients.API.Outbox.Models;
 using Microsoft.EntityFrameworkCore;
@@ -16,29 +17,24 @@ public sealed class CreateOutboxMessagesInterceptor : SaveChangesInterceptor
         var context = eventData.Context;
         if (context == null) return base.SavingChangesAsync(eventData, result, cancellationToken);
 
-        var outboxMessages = context
+        var domainEvents = context
             .ChangeTracker
-            .Entries<BankClient>()
-            .Where(x => x.State == EntityState.Added)
-            .Select(x =>
-                new OutboxMessage()
-                {
-                    Type = "BankClientCreated",
-                    OccurredOn = DateTime.UtcNow,
-                    Message = JsonSerializer.Serialize(new
-                    {
-                        x.Entity.Id,
-                        x.Entity.Name,
-                        x.Entity.CPF,
-                        x.Entity.Email,
-                        x.Entity.CreatedAt
-                    })
-                }
-            )
+            .Entries<AggregateRoot>()
+            .Where(x => x.Entity.DomainEvents.Any())
+            .Select(x => x.Entity.DomainEvents).ToList();
+        
+        var outboxMessagesFromDomainEvents = domainEvents
+            .SelectMany(x => x)
+            .Select(domainEvent => new OutboxMessage()
+            {
+                Type = domainEvent.GetType().FullName!,
+                OccurredOn = domainEvent.OccurredOn,
+                Message = JsonSerializer.Serialize(domainEvent, domainEvent.GetType())
+            })
             .ToList();
-        
-        context.Set<OutboxMessage>().AddRange(outboxMessages);
-        
+
+        context.Set<OutboxMessage>().AddRange(outboxMessagesFromDomainEvents);
+
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 }

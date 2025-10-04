@@ -1,14 +1,16 @@
 ﻿using BuildingBlocks.Behaviors;
+using BuildingBlocks.Events.Client;
+using BuildingBlocks.Outbox;
+using BuildingBlocks.Outbox.Interceptor;
+using BuildingBlocks.Outbox.Persistence;
 using Clients.API.Client.Persistence;
 using Clients.API.Data;
-using Clients.API.Data.Interceptors;
-using Clients.API.Messages;
-using Clients.API.Outbox.Job;
-using Clients.API.Outbox.Persistence;
+using Clients.API.Outbox.Jobs;
 using FluentValidation;
 using Hangfire;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using IProcessOutboxJob = BuildingBlocks.Outbox.Jobs.IProcessOutboxJob;
 
 namespace Clients.API;
 
@@ -21,7 +23,7 @@ public static class DependencyInjection
         services.AddSwaggerGen();
         return services;
     }
-    
+
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(options =>
@@ -29,12 +31,12 @@ public static class DependencyInjection
             options.AddOpenBehavior(typeof(ValidationBehavior<,>));
             options.RegisterServicesFromAssembly(typeof(Program).Assembly);
         });
-        
+
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
-        
+
         return services;
     }
-    
+
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddSingleton<CreateOutboxMessagesInterceptor>();
@@ -42,65 +44,64 @@ public static class DependencyInjection
         {
             options.AddInterceptors(serviceProvider.GetRequiredService<CreateOutboxMessagesInterceptor>());
 
-            //TODO - move connection string to configuration/env
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            {
-                options.UseSqlServer(
-                    "Server=localhost,1433;Database=Bank;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=Yes");
-            }
-
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Container")
-            {
-                options.UseSqlServer(
-                    "Server=client.db,1433;Database=Bank;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=Yes");
-            }
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            options.UseSqlServer(GetConnectionString(configuration));
         });
 
         services.AddHangfire();
         services.AddMassTransitLib(services.BuildServiceProvider().GetRequiredService<IConfiguration>());
-        
-        services.AddScoped<UnitOfWork>();
-        services.AddScoped<MessageService>();
+
+        services.AddScoped<UnitOfWork<ClientDbContext>>();
         services.AddScoped<IClientRepository, ClientRepository>();
-        services.AddScoped<IOutboxRepository, OutboxRepository>();
-        
+        services.AddScoped<IOutboxRepository, OutboxRepository<ClientDbContext>>();
+
         return services;
     }
 
-    private static IServiceCollection AddHangfire(this IServiceCollection services)
+    private static void AddHangfire(this IServiceCollection services)
     {
-        services.AddHangfire(configuration =>
+        services.AddHangfire((serviceProvider, hangFireConfiguration) =>
         {
-            configuration.UseSqlServerStorage(
-                "Server=client.db,1433;Database=Bank;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=Yes");
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            hangFireConfiguration.UseSqlServerStorage(GetConnectionString(configuration));
         });
 
         services.AddHangfireServer(options => options.SchedulePollingInterval = TimeSpan.FromSeconds(1));
 
         services.AddScoped<IProcessOutboxJob, ProcessOutboxJob>();
-        return services;
-    } 
-    
-    private static IServiceCollection AddMassTransitLib(this IServiceCollection services, IConfiguration configuration)
+    }
+
+    private static void AddMassTransitLib(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMassTransit(config =>
         {
             config.SetKebabCaseEndpointNameFormatter();
-    
+
             config.UsingRabbitMq((ctx, cfg) =>
             {
-        
                 cfg.Host(configuration["EventBus:HostAddress"], h =>
                 {
                     h.Username(configuration["EventBus:UserName"]!);
                     h.Password(configuration["EventBus:Password"]!);
                 });
-        
+
                 cfg.ConfigureEndpoints(ctx);
+
+                cfg.Message<ClientCreatedEvent>(x => x.SetEntityName("client-created"));
+
+                cfg.UseJsonSerializer();
+                cfg.UseJsonDeserializer();
             });
         });
-        
-        return services;
     }
     
+    private static string GetConnectionString(IConfiguration configuration)
+    {
+        var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+        var connectionString = configuration.GetConnectionString(env) ?? configuration[$"DatabaseStrings:{env}"];
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new InvalidOperationException($"Connection string for environment '{env}' is not configured.");
+
+        return connectionString;
+    }
 }

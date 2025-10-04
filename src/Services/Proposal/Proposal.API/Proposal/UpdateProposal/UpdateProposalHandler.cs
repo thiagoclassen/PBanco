@@ -16,7 +16,9 @@ public class UpdateProposalCommandHandler(IProposalRepository repository) : ICom
         if (proposal is null)
             return Error.Validation("Proposal.NotFound", "Proposal not found");
 
-        proposal.ProposalStatus = (ProposalStatus)Enum.Parse(typeof(ProposalStatus), command.NewStatus, true);
+        var status = (ProposalStatus)Enum.Parse(typeof(ProposalStatus), command.NewStatus, true);
+        proposal.UpdateStatus(status);
+        
         await repository.UpdateAsync(proposal, cancellationToken);
         
         return new ProposalResponse(

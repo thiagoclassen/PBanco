@@ -1,11 +1,14 @@
 ﻿using Clients.API.Outbox.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Clients.API.Data;
 
-public class UnitOfWork(
-    ClientDbContext context,
-    IOutboxRepository outboxRepository) : IDisposable
+public class UnitOfWork<TContext>(
+    TContext context,
+    IOutboxRepository outboxRepository) 
+    : IDisposable
+    where TContext : DbContext
 {
     private IDbContextTransaction? _transaction;
     public IOutboxRepository Outbox => outboxRepository;

@@ -1,7 +1,6 @@
+using BuildingBlocks.Outbox.Extensions;
 using Clients.API;
 using Clients.API.Data;
-using Clients.API.Messages;
-using Clients.API.Outbox.Extension;
 using Hangfire;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;

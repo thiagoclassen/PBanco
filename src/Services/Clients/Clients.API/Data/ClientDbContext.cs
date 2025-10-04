@@ -1,5 +1,5 @@
-﻿using Clients.API.Client.Models;
-using Clients.API.Outbox.Models;
+﻿using BuildingBlocks.Outbox.Models;
+using Clients.API.Client.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clients.API.Data;
@@ -28,6 +28,7 @@ public class ClientDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ClientDbContext).Assembly);
+        modelBuilder.Entity<OutboxMessage>().ToTable("OutboxMessages", "messaging");
 
         base.OnModelCreating(modelBuilder);
     }
