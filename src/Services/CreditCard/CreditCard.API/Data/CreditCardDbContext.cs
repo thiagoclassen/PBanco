@@ -1,19 +1,18 @@
 ﻿using BuildingBlocks.Outbox.Models;
 using Microsoft.EntityFrameworkCore;
-using ProposalApi.Proposal.Model;
 
-namespace ProposalApi.Data;
+namespace CreditCard.API.Data;
 
-public class ProposalDbContext : DbContext
+public class CreditCardDbContext : DbContext
 {
-    public DbSet<Proposal.Models.Proposal> Proposals { get; init; }
+    public DbSet<CreditCard.Models.CreditCard> CreditCards { get; init; }
     public DbSet<OutboxMessage> OutboxMessages { get; init; }
-    
-    public ProposalDbContext()
+
+    public CreditCardDbContext()
     {
     }
 
-    public ProposalDbContext(DbContextOptions<ProposalDbContext> options) : base(options)
+    public CreditCardDbContext(DbContextOptions<CreditCardDbContext> options) : base(options)
     {
     }
     
@@ -27,8 +26,10 @@ public class ProposalDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProposalDbContext).Assembly);
-        modelBuilder.Entity<OutboxMessage>().ToTable("OutboxMessages", "messaging");
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(CreditCardDbContext).Assembly);
+        
+        modelBuilder.Entity<OutboxMessage>()
+            .ToTable("OutboxMessages", "messaging");
 
         base.OnModelCreating(modelBuilder);
     }

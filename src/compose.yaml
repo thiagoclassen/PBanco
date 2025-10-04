@@ -35,10 +35,12 @@ services:
       context: .
       dockerfile: Services/Clients/Clients.API/Dockerfile
     ports:
+      - '8000:8000'
       - '8080:8080'
-      - '8081:8081'
     environment:
       - ASPNETCORE_ENVIRONMENT=Container
+      - ASPNETCORE_URLS=http://+:8000;http://+:8080
+      - DatabaseStrings__Container=Server=client.db,1433;Database=Clients;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=Yes;
       - EventBus__HostAddress=rabbitmq://pbanco.queue:5672
       - EventBus__UserName=guest
       - EventBus__Password=guest
@@ -54,14 +56,15 @@ services:
       context: .
       dockerfile: Services/Proposal/Proposal.API/Dockerfile
     ports:
-      - '8090:8090'
-      - '8091:8091'
+      - '8001:8001'
+      - '8081:8081'
     environment:
       - ASPNETCORE_ENVIRONMENT=Container
+      - ASPNETCORE_URLS=http://+:8001;http://+:8081
+      - DatabaseStrings__Container=Server=proposal.db,1436;Database=Proposals;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=Yes;
       - EventBus__HostAddress=rabbitmq://pbanco.queue:5672
       - EventBus__UserName=guest
       - EventBus__Password=guest
-      - ASPNETCORE_URLS=http://+:8090;http://+:8091      
     depends_on:
       pbanco.queue:
         condition: service_healthy
@@ -71,7 +74,7 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=yourStrong(!)Password
-      - MSSQL_TCP_PORT=1443
+      - MSSQL_TCP_PORT=1436
     #    healthcheck:
     #      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "yourStrong(!)Password" -Q "SELECT 1" -b -o /dev/null
     #      interval: 10s
@@ -79,4 +82,38 @@ services:
     #      retries: 10
     #      start_period: 10s
     ports:
-      - '1443:1443'
+      - '1436:1436'
+  credit-card.api:
+    image: credit-card.api
+    build:
+      context: .
+      dockerfile: Services/CreditCard/CreditCard.API/Dockerfile
+    ports:
+      - '8002:8002'
+      - '8082:8082'
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Container
+      - ASPNETCORE_URLS=http://+:8002;http://+:8082
+      - DatabaseStrings__Container=Server=credit-card.db,1435;Database=CreditCards;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=Yes;
+      - EventBus__HostAddress=rabbitmq://pbanco.queue:5672
+      - EventBus__UserName=guest
+      - EventBus__Password=guest
+    depends_on:
+      pbanco.queue:
+        condition: service_healthy
+  credit-card.db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=yourStrong(!)Password
+      - MSSQL_TCP_PORT=1435
+    #    healthcheck:
+    #      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "yourStrong(!)Password" -Q "SELECT 1" -b -o /dev/null
+    #      interval: 10s
+    #      timeout: 3s
+    #      retries: 10
+    #      start_period: 10s
+    ports:
+      - '1435:1435'
+

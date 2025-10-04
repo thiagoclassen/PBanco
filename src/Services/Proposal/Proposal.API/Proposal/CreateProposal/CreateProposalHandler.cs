@@ -14,15 +14,7 @@ public class CreateProposalCommandHandler(IProposalRepository repository)
 {
     public async Task<ErrorOr<Models.Proposal>> Handle(CreateProposalCommand command, CancellationToken cancellationToken)
     {
-        var proposal = new Models.Proposal
-        {
-            Id = Guid.NewGuid(),
-            ClientId = command.ClientId,
-            Requested = DateTime.UtcNow,
-            ProposalStatus = ProposalStatus.Pending,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+        var proposal = Models.Proposal.Create(command.ClientId);
         
         await repository.AddAsync(proposal, cancellationToken);
 

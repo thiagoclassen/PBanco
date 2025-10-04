@@ -2,17 +2,17 @@
 using BuildingBlocks.Events.Client;
 using BuildingBlocks.Outbox;
 using BuildingBlocks.Outbox.Interceptor;
+using BuildingBlocks.Outbox.Jobs;
 using BuildingBlocks.Outbox.Persistence;
-using Clients.API.Client.Persistence;
-using Clients.API.Data;
-using Clients.API.Outbox.Jobs;
+using CreditCard.API.CreditCard.Persistence;
+using CreditCard.API.Data;
+using CreditCard.API.Outbox.Jobs;
 using FluentValidation;
 using Hangfire;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using IProcessOutboxJob = BuildingBlocks.Outbox.Jobs.IProcessOutboxJob;
 
-namespace Clients.API;
+namespace CreditCard.API;
 
 public static class DependencyInjection
 {
@@ -23,7 +23,7 @@ public static class DependencyInjection
         services.AddSwaggerGen();
         return services;
     }
-
+    
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(options =>
@@ -36,11 +36,11 @@ public static class DependencyInjection
 
         return services;
     }
-
+    
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddSingleton<CreateOutboxMessagesInterceptor>();
-        services.AddDbContext<ClientDbContext>((serviceProvider, options) =>
+        services.AddDbContext<CreditCardDbContext>((serviceProvider, options) =>
         {
             options.AddInterceptors(serviceProvider.GetRequiredService<CreateOutboxMessagesInterceptor>());
 
@@ -51,13 +51,13 @@ public static class DependencyInjection
         services.AddHangfire();
         services.AddMassTransitLib(services.BuildServiceProvider().GetRequiredService<IConfiguration>());
 
-        services.AddScoped<UnitOfWork<ClientDbContext>>();
-        services.AddScoped<IClientRepository, ClientRepository>();
-        services.AddScoped<IOutboxRepository, OutboxRepository<ClientDbContext>>();
+        services.AddScoped<UnitOfWork<CreditCardDbContext>>();
+        services.AddScoped<ICreditCardRepository, CreditCardRepository>();
+        services.AddScoped<IOutboxRepository, OutboxRepository<CreditCardDbContext>>();
 
         return services;
     }
-
+    
     private static void AddHangfire(this IServiceCollection services)
     {
         services.AddHangfire((serviceProvider, hangFireConfiguration) =>
@@ -70,7 +70,7 @@ public static class DependencyInjection
 
         services.AddScoped<IProcessOutboxJob, ProcessOutboxJob>();
     }
-
+    
     private static void AddMassTransitLib(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMassTransit(config =>

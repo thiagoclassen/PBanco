@@ -28,6 +28,7 @@ public class ClientDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ClientDbContext).Assembly);
+        modelBuilder.Entity<OutboxMessage>().ToTable("OutboxMessages", "messaging");
 
         base.OnModelCreating(modelBuilder);
     }

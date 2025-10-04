@@ -26,7 +26,7 @@ public class BankClient : AggregateRoot
             BirthDate = birthDate,
         };
         
-        client.AddDomainEvent(new ClientCreated
+        client.AddDomainEvent(new ClientCreatedEvent
         {
             Id = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,

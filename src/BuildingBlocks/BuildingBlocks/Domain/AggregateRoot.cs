@@ -1,4 +1,6 @@
-﻿namespace BuildingBlocks.Domain;
+﻿using BuildingBlocks.Events.CreditCard;
+
+namespace BuildingBlocks.Domain;
 
 public abstract class AggregateRoot
 {

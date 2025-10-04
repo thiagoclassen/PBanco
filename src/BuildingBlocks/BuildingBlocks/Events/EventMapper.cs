@@ -10,8 +10,8 @@ public static class EventMapper
     {
         return eventTypeName switch
         {
-            _ when eventTypeName == typeof(ClientCreated).FullName => JsonSerializer.Deserialize<ClientCreated>(message),
-            _ when eventTypeName == typeof(ProposalStatusChanged).FullName => JsonSerializer.Deserialize<ProposalStatusChanged>(message),
+            _ when eventTypeName == typeof(ClientCreatedEvent).FullName => JsonSerializer.Deserialize<ClientCreatedEvent>(message),
+            _ when eventTypeName == typeof(ProposalStatusChangedEvent).FullName => JsonSerializer.Deserialize<ProposalStatusChangedEvent>(message),
             _ => null
         };
     }
