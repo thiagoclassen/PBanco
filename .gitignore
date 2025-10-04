@@ -4,3 +4,6 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 /src/rabbitmqdata/**
+/.idea/**
+PBanco.sln.DotSettings
+PBanco.sln.DotSettings.user
