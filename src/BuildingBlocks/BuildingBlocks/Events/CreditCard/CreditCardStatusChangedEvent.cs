@@ -4,9 +4,10 @@ namespace BuildingBlocks.Events.CreditCard;
 
 public class CreditCardStatusChangedEvent : IDomainEvent
 {
-    public Guid Id { get; set; }
-    public Guid CreditCardId { get; set; }
-    public required string NewStatus { get; set; }
-    public required string OldStatus { get; set; }
-    public DateTime OccurredOn { get; set; }
+    public required Guid EventId { get; init; }
+    public string EventName => nameof(CreditCardStatusChangedEvent);
+    public required Guid CreditCardId { get; init; }
+    public required string NewStatus { get; init; }
+    public required string OldStatus { get; init; }
+    public required DateTime OccurredOn { get; init; }
 }

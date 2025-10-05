@@ -1,13 +1,14 @@
 ﻿using BuildingBlocks.Events;
 using BuildingBlocks.Outbox;
 using BuildingBlocks.Outbox.Jobs;
+using BuildingBlocks.UnitOfWork;
 using Clients.API.Data;
 using MassTransit;
 
 namespace Clients.API.Outbox.Jobs;
 
 internal sealed class ProcessOutboxJob(
-    UnitOfWork<ClientDbContext> unitOfWork,
+    IUnitOfWork unitOfWork,
     IPublishEndpoint publishEndpoint,
     ILogger<ProcessOutboxJob> logger
 ) : IProcessOutboxJob
@@ -16,11 +17,10 @@ internal sealed class ProcessOutboxJob(
     {
         logger.LogInformation("===> Starting ProcessAsync/Transaction");
 
-        await unitOfWork.BeginTransactionAsync();
+        await unitOfWork.BeginTransactionAsync(cancellationToken);
 
         var messages = await unitOfWork.Outbox.GetUnprocessedMessagesAsync(cancellationToken: cancellationToken);
 
-        // var messages = await  repository.GetUnprocessedMessagesAsync(cancellationToken: cancellationToken);
         messages.ForEach(message => logger.LogInformation("===> Processing message {MessageId}", message.Id));
 
         await Task.WhenAll(messages.Select(async message =>
@@ -40,10 +40,5 @@ internal sealed class ProcessOutboxJob(
 
         logger.LogInformation("===> Finishing ProcessAsync/Transaction");
         return Task.CompletedTask;
-    }
-
-    public Task ProcessAsync()
-    {
-        throw new NotImplementedException();
     }
 }

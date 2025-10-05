@@ -1,13 +1,14 @@
 ﻿using BuildingBlocks.Events;
 using BuildingBlocks.Outbox;
 using BuildingBlocks.Outbox.Jobs;
+using BuildingBlocks.UnitOfWork;
 using CreditCard.API.Data;
 using MassTransit;
 
 namespace CreditCard.API.Outbox.Jobs;
 
 internal sealed class ProcessOutboxJob(
-    UnitOfWork<CreditCardDbContext> unitOfWork,
+    IUnitOfWork unitOfWork,
     IPublishEndpoint publishEndpoint,
     ILogger<ProcessOutboxJob> logger
 ) : IProcessOutboxJob
@@ -16,11 +17,10 @@ internal sealed class ProcessOutboxJob(
     {
         logger.LogInformation("===> Starting ProcessAsync/Transaction");
 
-        await unitOfWork.BeginTransactionAsync();
+        await unitOfWork.BeginTransactionAsync(cancellationToken);
 
         var messages = await unitOfWork.Outbox.GetUnprocessedMessagesAsync(cancellationToken: cancellationToken);
 
-        // var messages = await  repository.GetUnprocessedMessagesAsync(cancellationToken: cancellationToken);
         messages.ForEach(message => logger.LogInformation("===> Processing message {MessageId}", message.Id));
 
         await Task.WhenAll(messages.Select(async message =>

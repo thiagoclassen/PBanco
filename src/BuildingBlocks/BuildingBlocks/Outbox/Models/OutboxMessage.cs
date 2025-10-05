@@ -2,10 +2,10 @@
 
 public class OutboxMessage
 {
-    public int Id { get; set; }
-    public required string Type { get; set; }
-    public required string Message { get; set; }
-    public required DateTime OccurredOn { get; set; }
+    public int Id { get; init; }
+    public required string Type { get; init; }
+    public required string Message { get; init; }
+    public required DateTime OccurredOn { get; init; }
     public DateTime? ProcessedOn { get; set; }
-    public string? Error { get; set; } = "";
+    public string? Error { get; init; } = "";
 }

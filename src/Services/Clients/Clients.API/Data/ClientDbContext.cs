@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Outbox.Models;
+using BuildingBlocks.ProcessedEvents.Models;
 using Clients.API.Client.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ public class ClientDbContext : DbContext
 {
     public DbSet<BankClient> Clients { get; init; }
     public DbSet<OutboxMessage> OutboxMessages { get; init; }
+    public DbSet<ProcessedEvent> ProcessedEvents { get; init; }
 
     public ClientDbContext()
     {
@@ -29,6 +31,8 @@ public class ClientDbContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ClientDbContext).Assembly);
         modelBuilder.Entity<OutboxMessage>().ToTable("OutboxMessages", "messaging");
+        modelBuilder.Entity<ProcessedEvent>().HasKey(x => x.EventId);
+        modelBuilder.Entity<ProcessedEvent>().ToTable("ProcessedEvents", "messaging");
 
         base.OnModelCreating(modelBuilder);
     }
@@ -52,7 +56,7 @@ public class ClientDbContext : DbContext
 
         foreach (var entity in modifiedEntities)
         {
-            entity.Property("UpdatedAt").CurrentValue = DateTime.Now;
+            entity.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
         }
     }
 }

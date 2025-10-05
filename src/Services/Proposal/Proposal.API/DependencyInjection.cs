@@ -1,9 +1,13 @@
 ﻿using BuildingBlocks.Behaviors;
+using BuildingBlocks.Domain;
 using BuildingBlocks.Events.Client;
 using BuildingBlocks.Outbox;
 using BuildingBlocks.Outbox.Interceptor;
 using BuildingBlocks.Outbox.Jobs;
 using BuildingBlocks.Outbox.Persistence;
+using BuildingBlocks.ProcessedEvents.Filter;
+using BuildingBlocks.ProcessedEvents.Persistence;
+using BuildingBlocks.UnitOfWork;
 using FluentValidation;
 using Hangfire;
 using MassTransit;
@@ -51,8 +55,9 @@ public static class DependencyInjection
         services.AddMassTransitLib(services.BuildServiceProvider().GetRequiredService<IConfiguration>());
         services.AddHangfire();
         
-        services.AddScoped<UnitOfWork<ProposalDbContext>>();
+        services.AddScoped<IUnitOfWork, UnitOfWork<ProposalDbContext>>();
         services.AddScoped<IProposalRepository, ProposalRepository>();
+        services.AddScoped<IProcessedEventsRepository, ProcessedEventsRepository<ProposalDbContext>>();
         services.AddScoped<IOutboxRepository, OutboxRepository<ProposalDbContext>>();
         
         return services;
@@ -64,9 +69,7 @@ public static class DependencyInjection
         {
             config.SetKebabCaseEndpointNameFormatter();
     
-            config.AddConsumer<ClientCreatedConsumer>();
-            
-            
+            config.AddConsumersFromNamespaceContaining<ClientCreatedConsumer>();
             
             config.UsingRabbitMq((ctx, cfg) =>
             {
@@ -75,6 +78,8 @@ public static class DependencyInjection
                     h.Username(configuration["EventBus:UserName"]!);
                     h.Password(configuration["EventBus:Password"]!);
                 });
+                
+                cfg.UseConsumeFilter(typeof(ProcessedEventFilter<>), ctx);
 
                 cfg.ConfigureEndpoints(ctx);
                 
@@ -83,7 +88,7 @@ public static class DependencyInjection
                     r.Interval(3, TimeSpan.FromSeconds(10));
                 });
                 
-                cfg.Message<ClientCreatedEvent>(x => x.SetEntityName("client-created"));
+                //cfg.Message<ClientCreatedEvent>(x => x.SetEntityName("client-created"));
                 
                 cfg.UseJsonSerializer();
                 cfg.UseJsonDeserializer();

@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Outbox.Models;
+using BuildingBlocks.ProcessedEvents.Models;
 using Microsoft.EntityFrameworkCore;
 using ProposalApi.Proposal.Model;
 
@@ -8,6 +9,7 @@ public class ProposalDbContext : DbContext
 {
     public DbSet<Proposal.Models.Proposal> Proposals { get; init; }
     public DbSet<OutboxMessage> OutboxMessages { get; init; }
+    public DbSet<ProcessedEvent> ProcessedEvents { get; init; }
     
     public ProposalDbContext()
     {
@@ -28,7 +30,11 @@ public class ProposalDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProposalDbContext).Assembly);
+        
         modelBuilder.Entity<OutboxMessage>().ToTable("OutboxMessages", "messaging");
+        
+        modelBuilder.Entity<ProcessedEvent>().HasKey(x => x.EventId);
+        modelBuilder.Entity<ProcessedEvent>().ToTable("ProcessedEvents", "messaging");
 
         base.OnModelCreating(modelBuilder);
     }
@@ -52,7 +58,7 @@ public class ProposalDbContext : DbContext
 
         foreach (var entity in modifiedEntities)
         {
-            entity.Property("UpdatedAt").CurrentValue = DateTime.Now;
+                        entity.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
         }
     }
 }

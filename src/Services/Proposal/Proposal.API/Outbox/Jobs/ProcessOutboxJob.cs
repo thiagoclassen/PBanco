@@ -1,13 +1,14 @@
 ﻿using BuildingBlocks.Events;
 using BuildingBlocks.Outbox;
 using BuildingBlocks.Outbox.Jobs;
+using BuildingBlocks.UnitOfWork;
 using MassTransit;
 using ProposalApi.Data;
 
 namespace ProposalApi.Outbox.Jobs;
 
 internal sealed class ProcessOutboxJob(
-    UnitOfWork<ProposalDbContext> unitOfWork,
+    IUnitOfWork unitOfWork,
     IPublishEndpoint publishEndpoint,
     ILogger<ProcessOutboxJob> logger
 ) : IProcessOutboxJob
@@ -16,7 +17,7 @@ internal sealed class ProcessOutboxJob(
     {
         logger.LogInformation("===> Starting ProcessAsync/Transaction");
 
-        await unitOfWork.BeginTransactionAsync();
+        await unitOfWork.BeginTransactionAsync(cancellationToken);
 
         var messages = await unitOfWork.Outbox.GetUnprocessedMessagesAsync(cancellationToken: cancellationToken);
 

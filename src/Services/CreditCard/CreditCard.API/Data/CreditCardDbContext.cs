@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.Outbox.Models;
+using BuildingBlocks.ProcessedEvents.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CreditCard.API.Data;
@@ -7,6 +8,7 @@ public class CreditCardDbContext : DbContext
 {
     public DbSet<CreditCard.Models.CreditCard> CreditCards { get; init; }
     public DbSet<OutboxMessage> OutboxMessages { get; init; }
+    public DbSet<ProcessedEvent> ProcessedEvents { get; init; }
 
     public CreditCardDbContext()
     {
@@ -28,8 +30,9 @@ public class CreditCardDbContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CreditCardDbContext).Assembly);
         
-        modelBuilder.Entity<OutboxMessage>()
-            .ToTable("OutboxMessages", "messaging");
+        modelBuilder.Entity<OutboxMessage>().ToTable("OutboxMessages", "messaging");
+        modelBuilder.Entity<ProcessedEvent>().HasKey(x => x.EventId);
+        modelBuilder.Entity<ProcessedEvent>().ToTable("ProcessedEvents", "messaging");
 
         base.OnModelCreating(modelBuilder);
     }
@@ -53,7 +56,7 @@ public class CreditCardDbContext : DbContext
 
         foreach (var entity in modifiedEntities)
         {
-            entity.Property("UpdatedAt").CurrentValue = DateTime.Now;
+            entity.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
         }
     }
 }

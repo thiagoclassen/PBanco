@@ -1,0 +1,335 @@
+{
+	"info": {
+		"_postman_id": "70021169-b55d-4d75-903e-b50cc04db763",
+		"name": "PBank",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7845643"
+	},
+	"item": [
+		{
+			"name": "Client",
+			"item": [
+				{
+					"name": "CreateClient",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":\"John Doe\",\r\n    \"Email\":\"johndoe@gmail.com\",\r\n    \"CPF\":\"111.111.111-99\",\r\n    \"BirthDate\":\"2000-09-26T20:21:48.791Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{url}}:{{clientApiPort}}/api/clients",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{clientApiPort}}",
+							"path": [
+								"api",
+								"clients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetClient",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{clientApiPort}}/api/clients/{{Client.Id}}",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{clientApiPort}}",
+							"path": [
+								"api",
+								"clients",
+								"{{Client.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateClient",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\":\"John Doe da silva\",\r\n    \"Email\":\"johndoe@hotmail.com\"    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{url}}:{{clientApiPort}}/api/clients/{{Client.Id}}",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{clientApiPort}}",
+							"path": [
+								"api",
+								"clients",
+								"{{Client.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteClient",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{clientApiPort}}/api/clients/{{Client.Id}}",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{clientApiPort}}",
+							"path": [
+								"api",
+								"clients",
+								"{{Client.Id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Proposals",
+			"item": [
+				{
+					"name": "CreateProposal",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ClientId\":\"{{Client.Id}}\"    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{url}}:{{proposalApiPort}}/api/proposals",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{proposalApiPort}}",
+							"path": [
+								"api",
+								"proposals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProposalById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{proposalApiPort}}/api/proposals/{{Proposal.Id}}",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{proposalApiPort}}",
+							"path": [
+								"api",
+								"proposals",
+								"{{Proposal.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListProposals",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{proposalApiPort}}/api/proposals/",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{proposalApiPort}}",
+							"path": [
+								"api",
+								"proposals",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ApproveProposal",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ApprovedAmount\": 2000   \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{url}}:{{proposalApiPort}}/api/proposals/{{Proposal.Id}}/approve",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{proposalApiPort}}",
+							"path": [
+								"api",
+								"proposals",
+								"{{Proposal.Id}}",
+								"approve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CancelProposal",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{proposalApiPort}}/api/proposals/{{Proposal.Id}}/cancel",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{proposalApiPort}}",
+							"path": [
+								"api",
+								"proposals",
+								"{{Proposal.Id}}",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RejectProposal",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{proposalApiPort}}/api/proposals/{{Proposal.Id}}/Reject",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{proposalApiPort}}",
+							"path": [
+								"api",
+								"proposals",
+								"{{Proposal.Id}}",
+								"Reject"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CreditCard",
+			"item": [
+				{
+					"name": "RequestCreditCard",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ClientId\":\"20da6b6c-5bce-4771-80f4-32b96759891f\",\r\n    \"ProposalId\":\"0163b84b-4c3a-4efb-94d9-172b578ff89a\",\r\n    \"ExpensesLimit\":\"22222\",\r\n    \"CardProvider\":\"Visa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{url}}:{{creditCardApiPort}}/api/credit-cards",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{creditCardApiPort}}",
+							"path": [
+								"api",
+								"credit-cards"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Proposal.Id",
+			"value": ""
+		},
+		{
+			"key": "Client.Id",
+			"value": ""
+		}
+	]
+}
