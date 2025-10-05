@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CreditCard.API.Data.Migrations
+namespace Clients.API.Data.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -18,23 +18,23 @@ namespace CreditCard.API.Data.Migrations
                 name: "messaging");
 
             migrationBuilder.CreateTable(
-                name: "CreditCard",
+                name: "Clients",
                 schema: "bank",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProposalId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExpensesLimit = table.Column<int>(type: "int", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
-                    CardStatus = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
-                    CardProvider = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CPF = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CreditCard", x => x.Id);
+                    table.PrimaryKey("PK_Clients", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -63,6 +63,7 @@ namespace CreditCard.API.Data.Migrations
                     EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EventName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProcessedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProcessedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -75,7 +76,7 @@ namespace CreditCard.API.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CreditCard",
+                name: "Clients",
                 schema: "bank");
 
             migrationBuilder.DropTable(

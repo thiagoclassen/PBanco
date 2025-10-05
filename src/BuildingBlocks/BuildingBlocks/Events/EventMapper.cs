@@ -13,7 +13,7 @@ public static class EventMapper
         {
             // Client events
             _ when eventTypeName == typeof(ClientCreatedEvent).FullName => JsonSerializer.Deserialize<ClientCreatedEvent>(message),
-            _ when eventTypeName == typeof(ClientCanceledEvent).FullName => JsonSerializer.Deserialize<ClientCanceledEvent>(message),
+            _ when eventTypeName == typeof(ClientDeletedEvent).FullName => JsonSerializer.Deserialize<ClientDeletedEvent>(message),
             // Proposal events
             _ when eventTypeName == typeof(ProposalAmountUpdateEvent).FullName => JsonSerializer.Deserialize<ProposalAmountUpdateEvent>(message),
             _ when eventTypeName == typeof(ProposalApprovedEvent).FullName => JsonSerializer.Deserialize<ProposalApprovedEvent>(message),

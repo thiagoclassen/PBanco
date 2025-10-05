@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.Domain;
-using BuildingBlocks.Events;
 using BuildingBlocks.Events.Client;
 
 namespace Clients.API.Client.Models;
@@ -11,6 +10,8 @@ public class BankClient : AggregateRoot
     public string Email { get; set; } = null!;
     public string CPF { get; set; } = null!;
     public DateTime BirthDate { get; set; }
+    public bool IsDeleted { get; set; } = false;
+    public DateTime? DeletedAt { get; set; } = null;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
@@ -25,7 +26,7 @@ public class BankClient : AggregateRoot
             CPF = cpf,
             BirthDate = birthDate,
         };
-        
+
         client.AddDomainEvent(new ClientCreatedEvent
         {
             EventId = Guid.NewGuid(),
@@ -34,5 +35,18 @@ public class BankClient : AggregateRoot
         });
 
         return client;
+    }
+
+    public void Delete()
+    {
+        IsDeleted = true;
+        DeletedAt = DateTime.UtcNow;
+        
+        AddDomainEvent(new ClientDeletedEvent()
+        {
+            EventId = Guid.NewGuid(),
+            ClientId = Id,
+            OccurredOn = DateTime.UtcNow
+        });
     }
 }

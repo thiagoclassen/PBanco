@@ -40,12 +40,14 @@ public class ClientDbContext : DbContext
     public override int SaveChanges()
     {
         UpdateAtTimestamps();
+        SoftDeleteEntities();
         return base.SaveChanges();
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         UpdateAtTimestamps();
+        SoftDeleteEntities();
         return await base.SaveChangesAsync(cancellationToken);
     }
 
@@ -57,6 +59,19 @@ public class ClientDbContext : DbContext
         foreach (var entity in modifiedEntities)
         {
             entity.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
+        }
+    }
+    
+    private void SoftDeleteEntities()
+    {
+        var deletedEntities = ChangeTracker.Entries()
+            .Where(e => e.State == EntityState.Deleted && e.Metadata.GetProperties().Any(p => p.Name == "IsDeleted"));
+
+        foreach (var entity in deletedEntities)
+        {
+            entity.State = EntityState.Modified;
+            entity.Property("IsDeleted").CurrentValue = true;
+            entity.Property("DeletedAt").CurrentValue = DateTime.UtcNow;
         }
     }
 }

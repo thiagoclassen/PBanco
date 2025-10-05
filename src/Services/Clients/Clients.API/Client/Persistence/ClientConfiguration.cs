@@ -12,6 +12,9 @@ public class ClientConfiguration : IEntityTypeConfiguration<BankClient>
             .ToTable("Clients", "bank");
         
         builder
+            .HasQueryFilter(c=> !c.IsDeleted); // exclude soft-deleted records by default
+        
+        builder
             .HasKey(x => x.Id);
         
         builder

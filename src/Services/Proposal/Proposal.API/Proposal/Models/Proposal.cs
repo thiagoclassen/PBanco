@@ -53,16 +53,20 @@ public class Proposal : AggregateRoot
     
     public void Cancel()
     {
-        ProposalStatus = ProposalStatus.Cancelled;
-        ApprovedAmount = new Money(0);
+        ProposalStatus = ProposalStatus.Canceled;
         AddDomainEvent(new ProposalCanceledEvent
         {
             EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
             ProposalId = Id,
-            ClientId = ClientId,
-            ApprovedAmount = 0
+            ClientId = ClientId
         });
+    }
+    
+    public void CancelWithoutEvent()
+    {
+        ProposalStatus = ProposalStatus.Canceled;
+        ApprovedAmount = new Money(0);
     }
     
     public void Reject()
@@ -74,8 +78,7 @@ public class Proposal : AggregateRoot
             EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
             ProposalId = Id,
-            ClientId = ClientId,
-            ApprovedAmount = 0
+            ClientId = ClientId
         });
     }
     
@@ -114,5 +117,5 @@ public enum ProposalStatus
     Pending,
     Approved,
     Rejected,
-    Cancelled
+    Canceled
 }

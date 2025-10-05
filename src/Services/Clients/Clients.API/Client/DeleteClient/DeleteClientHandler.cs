@@ -13,7 +13,9 @@ public class DeleteClientCommandHandler(IClientRepository repository) : ICommand
         var client = await repository.GetByIdAsync(command.ClientId, cancellationToken);
         if (client is null)
             return new DeleteClientResult(false);
-
+        
+        client.Delete();
+        
         await repository.DeleteAsync(client, cancellationToken);
         return new DeleteClientResult(true);
     }

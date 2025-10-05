@@ -43,6 +43,7 @@ namespace ProposalApi.Data.Migrations
                     EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EventName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProcessedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProcessedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -58,7 +59,8 @@ namespace ProposalApi.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProposalStatus = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
-                    ApprovedAmount = table.Column<int>(type: "int", nullable: false),
+                    ApprovedAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Currency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     Requested = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")

@@ -11,6 +11,36 @@
 			"item": [
 				{
 					"name": "CreateClient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json();\r",
+									"let clientId = response.clientId;\r",
+									"\r",
+									"pm.collectionVariables.set(\"Client.Id\", clientId);\r",
+									"\r",
+									"// (optional) Log to console to verify\r",
+									"console.log(\"Client Id set: \", clientId);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -66,7 +96,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Name\":\"John Doe da silva\",\r\n    \"Email\":\"johndoe@hotmail.com\"    \r\n}",
+							"raw": "{\r\n    \"Name\":\"John Doe da silva sauro\",\r\n    \"Email\":\"johndoe@hotmail.com\"    \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -171,7 +201,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{url}}:{{proposalApiPort}}/api/proposals/",
+							"raw": "http://{{url}}:{{proposalApiPort}}/api/proposals/?userId={{Client.Id}}",
 							"protocol": "http",
 							"host": [
 								"{{url}}"
@@ -181,6 +211,12 @@
 								"api",
 								"proposals",
 								""
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{Client.Id}}"
+								}
 							]
 						}
 					},
@@ -260,6 +296,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "UpdateProposal",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": 1337.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{url}}:{{proposalApiPort}}/api/proposals/{{Proposal.Id}}",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{proposalApiPort}}",
+							"path": [
+								"api",
+								"proposals",
+								"{{Proposal.Id}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -273,7 +339,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"ClientId\":\"20da6b6c-5bce-4771-80f4-32b96759891f\",\r\n    \"ProposalId\":\"0163b84b-4c3a-4efb-94d9-172b578ff89a\",\r\n    \"ExpensesLimit\":\"22222\",\r\n    \"CardProvider\":\"Visa\"\r\n}",
+							"raw": "{\r\n    \"ClientId\":\"{{Client.Id}}\",\r\n    \"ProposalId\":\"{{Proposal.Id}}\",\r\n    \"ExpensesLimit\":\"22222\",\r\n    \"CardProvider\":\"MasterCard\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -290,6 +356,125 @@
 							"path": [
 								"api",
 								"credit-cards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListCreditCards",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{creditCardApiPort}}/api/credit-cards",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{creditCardApiPort}}",
+							"path": [
+								"api",
+								"credit-cards"
+							],
+							"query": [
+								{
+									"key": "clientId",
+									"value": "{{Client.Id}}",
+									"disabled": true
+								},
+								{
+									"key": "proposalId",
+									"value": "{{Proposal.Id}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCreditCardById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{creditCardApiPort}}/api/credit-cards/{{creditCard.Id}}",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{creditCardApiPort}}",
+							"path": [
+								"api",
+								"credit-cards",
+								"{{creditCard.Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ActivateCreditCard",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{creditCardApiPort}}/api/credit-cards/{{creditCard.Id}}/activate",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{creditCardApiPort}}",
+							"path": [
+								"api",
+								"credit-cards",
+								"{{creditCard.Id}}",
+								"activate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BlockCreditCard",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{creditCardApiPort}}/api/credit-cards/{{creditCard.Id}}/block",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{creditCardApiPort}}",
+							"path": [
+								"api",
+								"credit-cards",
+								"{{creditCard.Id}}",
+								"block"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CancelCreditCard",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{creditCardApiPort}}/api/credit-cards/{{creditCard.Id}}/cancel",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{creditCardApiPort}}",
+							"path": [
+								"api",
+								"credit-cards",
+								"{{creditCard.Id}}",
+								"cancel"
 							]
 						}
 					},
@@ -330,6 +515,11 @@
 		{
 			"key": "Client.Id",
 			"value": ""
+		},
+		{
+			"key": "creditCard.Id",
+			"value": "",
+			"type": "default"
 		}
 	]
 }
