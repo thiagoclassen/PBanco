@@ -4,6 +4,10 @@ using BuildingBlocks.Outbox;
 using BuildingBlocks.Outbox.Interceptor;
 using BuildingBlocks.Outbox.Jobs;
 using BuildingBlocks.Outbox.Persistence;
+using BuildingBlocks.ProcessedEvents.Filter;
+using BuildingBlocks.ProcessedEvents.Persistence;
+using BuildingBlocks.UnitOfWork;
+using CreditCard.API.Consumer;
 using CreditCard.API.CreditCard.Persistence;
 using CreditCard.API.Data;
 using CreditCard.API.Outbox.Jobs;
@@ -51,8 +55,9 @@ public static class DependencyInjection
         services.AddHangfire();
         services.AddMassTransitLib(services.BuildServiceProvider().GetRequiredService<IConfiguration>());
 
-        services.AddScoped<UnitOfWork<CreditCardDbContext>>();
+        services.AddScoped<IUnitOfWork, UnitOfWork<CreditCardDbContext>>();
         services.AddScoped<ICreditCardRepository, CreditCardRepository>();
+        services.AddScoped<IProcessedEventsRepository, ProcessedEventsRepository<CreditCardDbContext>>();
         services.AddScoped<IOutboxRepository, OutboxRepository<CreditCardDbContext>>();
 
         return services;
@@ -77,6 +82,8 @@ public static class DependencyInjection
         {
             config.SetKebabCaseEndpointNameFormatter();
 
+            config.AddConsumersFromNamespaceContaining<ProposalApprovedConsumer>();
+
             config.UsingRabbitMq((ctx, cfg) =>
             {
                 cfg.Host(configuration["EventBus:HostAddress"], h =>
@@ -86,8 +93,8 @@ public static class DependencyInjection
                 });
 
                 cfg.ConfigureEndpoints(ctx);
-
-                cfg.Message<ClientCreatedEvent>(x => x.SetEntityName("client-created"));
+                cfg.UseConsumeFilter(typeof(ProcessedEventFilter<>), ctx);
+                //cfg.Message<ClientCreatedEvent>(x => x.SetEntityName("client-created"));
 
                 cfg.UseJsonSerializer();
                 cfg.UseJsonDeserializer();

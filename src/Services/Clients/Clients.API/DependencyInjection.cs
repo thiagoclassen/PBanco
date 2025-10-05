@@ -3,6 +3,9 @@ using BuildingBlocks.Events.Client;
 using BuildingBlocks.Outbox;
 using BuildingBlocks.Outbox.Interceptor;
 using BuildingBlocks.Outbox.Persistence;
+using BuildingBlocks.ProcessedEvents.Filter;
+using BuildingBlocks.ProcessedEvents.Persistence;
+using BuildingBlocks.UnitOfWork;
 using Clients.API.Client.Persistence;
 using Clients.API.Data;
 using Clients.API.Outbox.Jobs;
@@ -51,8 +54,9 @@ public static class DependencyInjection
         services.AddHangfire();
         services.AddMassTransitLib(services.BuildServiceProvider().GetRequiredService<IConfiguration>());
 
-        services.AddScoped<UnitOfWork<ClientDbContext>>();
+        services.AddScoped<IUnitOfWork, UnitOfWork<ClientDbContext>>();
         services.AddScoped<IClientRepository, ClientRepository>();
+        services.AddScoped<IProcessedEventsRepository, ProcessedEventsRepository<ClientDbContext>>();
         services.AddScoped<IOutboxRepository, OutboxRepository<ClientDbContext>>();
 
         return services;
@@ -87,7 +91,8 @@ public static class DependencyInjection
 
                 cfg.ConfigureEndpoints(ctx);
 
-                cfg.Message<ClientCreatedEvent>(x => x.SetEntityName("client-created"));
+                cfg.UseConsumeFilter(typeof(ProcessedEventFilter<>), ctx);
+                // cfg.Message<ClientCreatedEvent>(x => x.SetEntityName("client-created"));
 
                 cfg.UseJsonSerializer();
                 cfg.UseJsonDeserializer();

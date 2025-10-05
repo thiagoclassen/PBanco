@@ -14,7 +14,7 @@ public class GetClientEndpoint(ISender sender) : ApiController
         var result = await sender.Send(query, cancellationToken);
 
         return result.Match(
-            _ => result.Value is null ? NotFound() : Ok(result.Value),
+            _ => result.Value is null ? NotFound() : Ok(result.Value.MapToClientResult()),
             errors => Problem(errors));
     }
 }

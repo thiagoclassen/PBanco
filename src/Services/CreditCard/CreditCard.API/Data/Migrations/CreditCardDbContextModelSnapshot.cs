@@ -52,6 +52,28 @@ namespace CreditCard.API.Data.Migrations
                     b.ToTable("OutboxMessages", "messaging");
                 });
 
+            modelBuilder.Entity("BuildingBlocks.ProcessedEvents.Models.ProcessedEvent", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EventName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ProcessedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("EventId");
+
+                    b.ToTable("ProcessedEvents", "messaging");
+                });
+
             modelBuilder.Entity("CreditCard.API.CreditCard.Models.CreditCard", b =>
                 {
                     b.Property<Guid>("Id")

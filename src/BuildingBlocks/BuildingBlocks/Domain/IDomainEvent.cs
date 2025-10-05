@@ -2,6 +2,7 @@
 
 public interface IDomainEvent
 {
-    public Guid Id { get; set; }
-    public DateTime OccurredOn { get; set; }
+    public Guid EventId { get; init; }
+    public string EventName { get; }
+    public DateTime OccurredOn { get; init; }
 }

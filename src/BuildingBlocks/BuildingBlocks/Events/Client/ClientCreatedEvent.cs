@@ -4,7 +4,8 @@ namespace BuildingBlocks.Events.Client;
 
 public class ClientCreatedEvent : IDomainEvent
 {
-    public Guid Id { get; set; }
-    public DateTime OccurredOn { get; set; }
-    public Guid ClientId { get; set; }
+    public required Guid EventId { get; init; }
+    public string EventName => nameof(ClientCreatedEvent);
+    public required DateTime OccurredOn { get; init; }
+    public required Guid ClientId { get; init; }
 }

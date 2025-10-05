@@ -32,6 +32,11 @@ public sealed class CreateOutboxMessagesInterceptor : SaveChangesInterceptor
             .ToList();
 
         context.Set<OutboxMessage>().AddRange(outboxMessagesFromDomainEvents);
+        
+        foreach (var entry in context.ChangeTracker.Entries<AggregateRoot>())
+        {
+            entry.Entity.ClearDomainEvents();
+        }
 
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }

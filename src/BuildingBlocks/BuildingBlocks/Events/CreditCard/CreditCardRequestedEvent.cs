@@ -4,13 +4,14 @@ namespace BuildingBlocks.Events.CreditCard;
 
 public class CreditCardRequestedEvent : IDomainEvent
 {
-    public Guid Id { get; set; }
-    public DateTime OccurredOn { get; set; }
-    public Guid CreditCardId { get; set; }
-    public Guid ClientId { get; set; }
-    public Guid ProposalId { get; set; }
-    public int ExpensesLimit { get; set; }
-    public int CardNumber { get; set; }
-    public required string CardStatus { get; set; }
-    public required string CardProvider { get; set; }   
+    public required Guid EventId { get; init; }
+    public string EventName => nameof(CreditCardRequestedEvent);
+    public required DateTime OccurredOn { get; init; }
+    public required Guid CreditCardId { get; init; }
+    public required Guid ClientId { get; init; }
+    public required Guid ProposalId { get; init; }
+    public required int ExpensesLimit { get; init; }
+    public required int CardNumber { get; init; }
+    public required string CardStatus { get; init; }
+    public required string CardProvider { get; init; }
 }

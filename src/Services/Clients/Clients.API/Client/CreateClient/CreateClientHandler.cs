@@ -19,8 +19,6 @@ public class CreateClientCommandHandler(IClientRepository repository)
 {
     public async Task<ErrorOr<BankClient>> Handle(CreateClientCommand command, CancellationToken cancellationToken)
     {
-        //var client = command.MapToBankClient();
-        
         var client = BankClient.Create(command.Name, command.Email, command.CPF, command.BirthDate);
 
         await repository.AddAsync(client, cancellationToken);

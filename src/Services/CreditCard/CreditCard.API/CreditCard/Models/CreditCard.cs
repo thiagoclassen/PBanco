@@ -6,8 +6,8 @@ namespace CreditCard.API.CreditCard.Models;
 public class CreditCard : AggregateRoot
 {
     public Guid Id { get; init; }
-    public required Guid ClientId { get; set; }
-    public required Guid ProposalId { get; set; }
+    public required Guid ClientId { get; init; }
+    public required Guid ProposalId { get; init; }
     public int ExpensesLimit { get; set; } = 0;
     public int Number { get; set; } = 0;
     public CardStatus CardStatus { get; set; }
@@ -20,7 +20,7 @@ public class CreditCard : AggregateRoot
         if (CardStatus == newStatus) return;
         AddDomainEvent(new CreditCardStatusChangedEvent()
         {
-            Id = Guid.NewGuid(),
+            EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
             CreditCardId = Id,
             OldStatus = CardStatus.ToString(),
@@ -49,7 +49,7 @@ public class CreditCard : AggregateRoot
         
         creditCard.AddDomainEvent(new CreditCardRequestedEvent()
         {
-            Id = Guid.NewGuid(),
+            EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
             CreditCardId = creditCard.Id,
             ClientId = creditCard.ClientId,
