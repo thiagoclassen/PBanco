@@ -11,7 +11,7 @@ public class CreateProposalEndpoint(ISender sender) : ApiController
         [FromBody] CreateProposalRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new CreateProposalCommand(request.ClientId);
+        var command = new CreateProposalCommand(request.ClientId, request.RequestedAmount);
         var result = await sender.Send(command, cancellationToken);
         
         return result.Match(

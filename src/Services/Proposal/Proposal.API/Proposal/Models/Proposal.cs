@@ -66,13 +66,11 @@ public class Proposal : AggregateRoot
     public void CancelWithoutEvent()
     {
         ProposalStatus = ProposalStatus.Canceled;
-        ApprovedAmount = new Money(0);
     }
 
     public void Reject()
     {
         ProposalStatus = ProposalStatus.Rejected;
-        ApprovedAmount = new Money(0);
         AddDomainEvent(new ProposalRejectedEvent
         {
             EventId = Guid.NewGuid(),

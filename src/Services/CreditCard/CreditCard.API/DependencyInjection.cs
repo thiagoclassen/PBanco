@@ -90,7 +90,10 @@ public static class DependencyInjection
                     h.Password(configuration["EventBus:Password"]!);
                 });
 
-                cfg.ConfigureEndpoints(ctx);
+                cfg.ConfigureEndpoints(ctx, new KebabCaseEndpointNameFormatter(
+                    prefix: "credit-card-service",
+                    false
+                ));
                 cfg.UseConsumeFilter(typeof(ProcessedEventFilter<>), ctx);
 
                 cfg.UseJsonSerializer();

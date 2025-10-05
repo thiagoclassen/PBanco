@@ -88,12 +88,17 @@ public static class DependencyInjection
                     h.Username(configuration["EventBus:UserName"]!);
                     h.Password(configuration["EventBus:Password"]!);
                 });
+                
+                cfg.UseMessageRetry(r => r.Immediate(3));
+                cfg.UseMessageRetry(r => r.Interval(1, TimeSpan.FromMinutes(1)));
 
-                cfg.ConfigureEndpoints(ctx);
+                cfg.ConfigureEndpoints(ctx, new KebabCaseEndpointNameFormatter(
+                    prefix: "credit-card-service",
+                    false
+                ));
 
                 cfg.UseConsumeFilter(typeof(ProcessedEventFilter<>), ctx);
-                // cfg.Message<ClientCreatedEvent>(x => x.SetEntityName("client-created"));
-
+                
                 cfg.UseJsonSerializer();
                 cfg.UseJsonDeserializer();
             });

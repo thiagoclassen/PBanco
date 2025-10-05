@@ -78,7 +78,10 @@ public static class DependencyInjection
 
                 cfg.UseConsumeFilter(typeof(ProcessedEventFilter<>), ctx);
 
-                cfg.ConfigureEndpoints(ctx);
+                cfg.ConfigureEndpoints(ctx, new KebabCaseEndpointNameFormatter(
+                    prefix: "proposal-service",
+                    false
+                ));
 
                 cfg.UseMessageRetry(r => { r.Interval(3, TimeSpan.FromSeconds(10)); });
 
