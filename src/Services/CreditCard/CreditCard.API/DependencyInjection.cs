@@ -104,10 +104,9 @@ public static class DependencyInjection
 
     private static string GetConnectionString(IConfiguration configuration)
     {
-        var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
-        var connectionString = configuration.GetConnectionString(env) ?? configuration[$"DatabaseStrings:{env}"];
+        var connectionString = configuration.GetConnectionString("Default");
         if (string.IsNullOrWhiteSpace(connectionString))
-            throw new InvalidOperationException($"Connection string for environment '{env}' is not configured.");
+            throw new InvalidOperationException($"Connection string is not configured.");
 
         return connectionString;
     }
