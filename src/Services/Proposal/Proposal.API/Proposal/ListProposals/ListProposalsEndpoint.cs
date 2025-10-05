@@ -7,9 +7,9 @@ namespace ProposalApi.Proposal.ListProposals;
 public class ListProposalsEndpoint(ISender sender) : ApiController
 {
     [HttpGet("/api/proposals")]
-    public async Task<IActionResult> ListProposals(CancellationToken cancellationToken)
+    public async Task<IActionResult> ListProposals([FromQuery]Guid? userId,CancellationToken cancellationToken)
     {
-        var command = new ListProposalsQuery();
+        var command = new ListProposalsQuery(userId);
         var result = await sender.Send(command, cancellationToken);
 
         return result.Match(

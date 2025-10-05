@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.CQRS;
+using BuildingBlocks.Domain.Shared;
 using ProposalApi.Proposal.Persistence;
 
 namespace ProposalApi.Proposal.ApproveProposal;
@@ -15,7 +16,7 @@ public class ApproveProposalCommandHandler(
 
         if (proposal is null) return Error.NotFound("Proposal.NotFound", "Proposal not found");
         
-        proposal.Approve(command.ApprovedAmount);
+        proposal.Approve(new Money(command.ApprovedAmount));
         
         await repository.UpdateAsync(proposal, cancellationToken);
         

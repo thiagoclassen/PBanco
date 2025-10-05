@@ -69,6 +69,9 @@ namespace CreditCard.API.Data.Migrations
                     b.Property<DateTime>("ProcessedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("ProcessedOn")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("EventId");
 
                     b.ToTable("ProcessedEvents", "messaging");
@@ -98,9 +101,6 @@ namespace CreditCard.API.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int>("ExpensesLimit")
-                        .HasColumnType("int");
-
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
@@ -115,6 +115,35 @@ namespace CreditCard.API.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CreditCard", "bank");
+                });
+
+            modelBuilder.Entity("CreditCard.API.CreditCard.Models.CreditCard", b =>
+                {
+                    b.OwnsOne("BuildingBlocks.Domain.Shared.Money", "ExpensesLimit", b1 =>
+                        {
+                            b1.Property<Guid>("CreditCardId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<decimal>("Amount")
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("ExpensesLimit");
+
+                            b1.Property<string>("Currency")
+                                .IsRequired()
+                                .HasMaxLength(3)
+                                .HasColumnType("nvarchar(3)")
+                                .HasColumnName("Currency");
+
+                            b1.HasKey("CreditCardId");
+
+                            b1.ToTable("CreditCard", "bank");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CreditCardId");
+                        });
+
+                    b.Navigation("ExpensesLimit")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

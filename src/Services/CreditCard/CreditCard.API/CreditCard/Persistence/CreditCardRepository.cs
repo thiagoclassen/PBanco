@@ -29,9 +29,21 @@ public class CreditCardRepository(CreditCardDbContext dbContext) : ICreditCardRe
         return await dbContext.CreditCards.Where(card => card.ClientId == userId).ToListAsync(cancellationToken);
     }
 
-    public async Task<List<Models.CreditCard>> ListCreditCardsFromProposalUserAsync(Guid proposalId,
+    public async Task<List<Models.CreditCard>> ListCreditCardsAsync(CancellationToken cancellationToken)
+    {
+        return await dbContext.CreditCards.ToListAsync(cancellationToken);
+    }
+
+    public async Task<List<Models.CreditCard>> ListCreditCardsFromProposalAsync(Guid proposalId,
         CancellationToken cancellationToken)
     {
         return await dbContext.CreditCards.Where(card => card.ProposalId == proposalId).ToListAsync(cancellationToken);
+    }
+
+    public async Task<List<Models.CreditCard>> ListCreditCardsFromUserAndProposalAsync(Guid clientId, Guid proposalId,
+        CancellationToken cancellationToken)
+    {
+        return await dbContext.CreditCards.Where(card => card.ProposalId == proposalId && card.ClientId == clientId)
+            .ToListAsync(cancellationToken);
     }
 }

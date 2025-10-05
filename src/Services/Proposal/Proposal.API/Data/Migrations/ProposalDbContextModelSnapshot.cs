@@ -69,6 +69,9 @@ namespace ProposalApi.Data.Migrations
                     b.Property<DateTime>("ProcessedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("ProcessedOn")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("EventId");
 
                     b.ToTable("ProcessedEvents", "messaging");
@@ -79,9 +82,6 @@ namespace ProposalApi.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ApprovedAmount")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uniqueidentifier");
@@ -109,6 +109,35 @@ namespace ProposalApi.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Proposals", "bank");
+                });
+
+            modelBuilder.Entity("ProposalApi.Proposal.Models.Proposal", b =>
+                {
+                    b.OwnsOne("BuildingBlocks.Domain.Shared.Money", "ApprovedAmount", b1 =>
+                        {
+                            b1.Property<Guid>("ProposalId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<decimal>("Amount")
+                                .HasColumnType("decimal(18,2)")
+                                .HasColumnName("ApprovedAmount");
+
+                            b1.Property<string>("Currency")
+                                .IsRequired()
+                                .HasMaxLength(3)
+                                .HasColumnType("nvarchar(3)")
+                                .HasColumnName("Currency");
+
+                            b1.HasKey("ProposalId");
+
+                            b1.ToTable("Proposals", "bank");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProposalId");
+                        });
+
+                    b.Navigation("ApprovedAmount")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

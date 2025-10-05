@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.CQRS;
+using BuildingBlocks.Domain.Shared;
 using CreditCard.API.CreditCard.Models;
 using CreditCard.API.CreditCard.Persistence;
 using FluentValidation;
@@ -8,7 +9,7 @@ namespace CreditCard.API.CreditCard.RequestCreditCard;
 public record RequestCreditCardCommand(
     Guid ClientId, 
     Guid ProposalId, 
-    int ExpensesLimit,
+    Money ExpensesLimit,
     CardProvider CardProvider)
     : ICommand<ErrorOr<Models.CreditCard>>;
 
@@ -35,7 +36,7 @@ public class RequestCreditCardCommandValidator : AbstractValidator<RequestCredit
             .NotEmpty().WithMessage("ClientId is required.");
         RuleFor(x => x.ProposalId)
             .NotEmpty().WithMessage("ProposalId is required.");
-        RuleFor(x => x.ExpensesLimit)
+        RuleFor(x => x.ExpensesLimit.Amount)
             .GreaterThan(0).WithMessage("ExpensesLimit must be greater than zero.");
         RuleFor(x => x.CardProvider)
             .IsInEnum().WithMessage("Invalid CardProvider.");

@@ -1,4 +1,5 @@
-﻿using CreditCard.API.CreditCard.Models;
+﻿using BuildingBlocks.Domain.Shared;
+using CreditCard.API.CreditCard.Models;
 using CreditCard.API.CreditCard.RequestCreditCard;
 
 namespace CreditCard.API.CreditCard;
@@ -10,7 +11,7 @@ public static class CreditCardMapping
         return new RequestCreditCardCommand(
             request.ClientId,
             request.ProposalId,
-            request.ExpensesLimit,
+            new Money(request.ExpensesLimit),
             Enum.Parse<CardProvider>(request.CardProvider));
     }
 
@@ -21,7 +22,7 @@ public static class CreditCardMapping
             request.ClientId,
             request.ProposalId,
             request.Number,
-            request.ExpensesLimit,
+            request.ExpensesLimit.ToString(),
             request.CardProvider.ToString(),
             request.CardStatus.ToString(),
             request.CreatedAt,

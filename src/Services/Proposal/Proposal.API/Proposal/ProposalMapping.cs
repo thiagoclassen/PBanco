@@ -9,6 +9,7 @@ public static class ProposalMapping
         new ProposalResponse(proposal.Id, 
             proposal.ClientId, 
             proposal.ProposalStatus.ToString(),
+            proposal.ApprovedAmount.ToString(),
             proposal.Requested, 
             proposal.CreatedAt, 
             proposal.UpdatedAt);

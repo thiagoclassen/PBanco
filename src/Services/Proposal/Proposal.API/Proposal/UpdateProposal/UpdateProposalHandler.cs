@@ -1,12 +1,12 @@
 ﻿using BuildingBlocks.CQRS;
-using ProposalApi.Proposal.Models;
+using BuildingBlocks.Domain.Shared;
 using ProposalApi.Proposal.Persistence;
 
 namespace ProposalApi.Proposal.UpdateProposal;
 
-public record UpdateProposalCommand(Guid ProposalId, string NewStatus) : ICommand<ErrorOr<ProposalResponse>>;
+public record UpdateProposalCommand(Guid ProposalId, decimal Amount) : ICommand<ErrorOr<ProposalResponse>>;
 
-public record ProposalResponse(Guid Id, Guid ClientId, string Status, DateTime Requested, DateTime CreatedAt, DateTime UpdatedAt);
+public record ProposalResponse(Guid Id, Guid ClientId, string Status, string ApprovedAmount, DateTime Requested, DateTime CreatedAt, DateTime UpdatedAt);
 
 public class UpdateProposalCommandHandler(IProposalRepository repository) : ICommandHandler<UpdateProposalCommand, ErrorOr<ProposalResponse>>
 {
@@ -15,16 +15,16 @@ public class UpdateProposalCommandHandler(IProposalRepository repository) : ICom
         var proposal = await repository.GetByIdAsync(command.ProposalId, cancellationToken);
         if (proposal is null)
             return Error.Validation("Proposal.NotFound", "Proposal not found");
-
-        var status = (ProposalStatus)Enum.Parse(typeof(ProposalStatus), command.NewStatus, true);
-        proposal.UpdateStatus(status);
+        
+        proposal.UpdateAmount(new Money(command.Amount));
         
         await repository.UpdateAsync(proposal, cancellationToken);
         
-        return new ProposalResponse(
+        return new ProposalResponse( 
             proposal.Id,
             proposal.ClientId,
             proposal.ProposalStatus.ToString(),
+            proposal.ApprovedAmount.ToString(),
             proposal.Requested,
             proposal.CreatedAt,
             proposal.UpdatedAt

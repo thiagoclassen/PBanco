@@ -1,5 +1,4 @@
-﻿using ProposalApi.Proposal.Model;
-
+﻿
 namespace ProposalApi.Proposal.CreateProposal;
 
 public class CreateProposalRequest

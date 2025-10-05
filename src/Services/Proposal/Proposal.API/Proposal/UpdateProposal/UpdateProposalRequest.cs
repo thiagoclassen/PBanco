@@ -2,5 +2,5 @@
 
 public class UpdateProposalRequest
 {
-    public string NewStatus { get; set; } = null!;
+    public decimal Amount { get; set; }
 }

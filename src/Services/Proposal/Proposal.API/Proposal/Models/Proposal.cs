@@ -1,6 +1,6 @@
 ﻿using BuildingBlocks.Domain;
+using BuildingBlocks.Domain.Shared;
 using BuildingBlocks.Events.Proposal;
-using ProposalApi.Proposal.Model;
 
 namespace ProposalApi.Proposal.Models;
 
@@ -9,12 +9,10 @@ public class Proposal : AggregateRoot
     public Guid Id { get; init; }
     public required Guid ClientId { get; init; }
     public ProposalStatus ProposalStatus { get; set; } = ProposalStatus.Pending;
-    public int ApprovedAmount { get; set; } = 0;
+    public Money ApprovedAmount { get; set; } = new Money(0);
     public DateTime Requested { get; init; }
     public DateTime CreatedAt { get; init; }
     public DateTime UpdatedAt { get; set; }
-    
-    // public ProposalStatusLookup ProposalStatusLookup { get; set; }
     
    public static Proposal Create(Guid clientId)
     {
@@ -39,7 +37,7 @@ public class Proposal : AggregateRoot
         return proposal;
     }
    
-    public void Approve(int amount)
+    public void Approve(Money amount)
     {
         ProposalStatus = ProposalStatus.Approved;
         ApprovedAmount = amount;
@@ -56,7 +54,7 @@ public class Proposal : AggregateRoot
     public void Cancel()
     {
         ProposalStatus = ProposalStatus.Cancelled;
-        ApprovedAmount = 0;
+        ApprovedAmount = new Money(0);
         AddDomainEvent(new ProposalCanceledEvent
         {
             EventId = Guid.NewGuid(),
@@ -70,7 +68,7 @@ public class Proposal : AggregateRoot
     public void Reject()
     {
         ProposalStatus = ProposalStatus.Rejected;
-        ApprovedAmount = 0;
+        ApprovedAmount = new Money(0);
         AddDomainEvent(new ProposalRejectedEvent
         {
             EventId = Guid.NewGuid(),
@@ -93,6 +91,20 @@ public class Proposal : AggregateRoot
             NewStatus = newStatus.ToString()
         });
         ProposalStatus = newStatus;
+    }
+    
+    public void UpdateAmount(Money newAmount)
+    {
+        if (ApprovedAmount == newAmount) return;
+        AddDomainEvent(new ProposalAmountUpdateEvent
+        {
+            EventId = Guid.NewGuid(),
+            OccurredOn = DateTime.UtcNow,
+            ProposalId = Id,
+            OldAmount = ApprovedAmount,
+            NewAmount = newAmount
+        });
+        ApprovedAmount = newAmount;
     }
 
 }

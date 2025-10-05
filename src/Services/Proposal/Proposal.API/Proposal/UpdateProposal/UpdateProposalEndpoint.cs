@@ -13,7 +13,7 @@ public class UpdateProposalEndpoint(ISender sender) : ApiController
         CancellationToken cancellationToken)
     {
 
-        var command = new UpdateProposalCommand(proposalId, request.NewStatus);
+        var command = new UpdateProposalCommand(proposalId, request.Amount);
         var result = await sender.Send(command, cancellationToken);
         
         return result.Match(

@@ -6,5 +6,5 @@ public interface IProposalRepository
     Task<Models.Proposal?> GetByIdAsync(Guid proposalId, CancellationToken cancellationToken);
     Task UpdateAsync(Models.Proposal proposal, CancellationToken cancellationToken);
     Task<List<Models.Proposal>> GetAllAsync(CancellationToken cancellationToken);
-    
+    Task<List<Models.Proposal>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken);
 }

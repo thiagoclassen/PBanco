@@ -3,8 +3,7 @@ using ProposalApi.Data;
 
 namespace ProposalApi.Proposal.Persistence;
 
-public class ProposalRepository
-    (ProposalDbContext dbContext): IProposalRepository
+public class ProposalRepository(ProposalDbContext dbContext) : IProposalRepository
 {
     public async Task AddAsync(Models.Proposal proposal, CancellationToken cancellationToken)
     {
@@ -26,5 +25,11 @@ public class ProposalRepository
     public async Task<List<Models.Proposal>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await dbContext.Proposals.ToListAsync(cancellationToken);
+    }
+
+    public async Task<List<Models.Proposal>> GetByUserIdAsync(Guid userId,
+        CancellationToken cancellationToken)
+    {
+        return await dbContext.Proposals.Where(p => p.ClientId == userId).ToListAsync(cancellationToken);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using BuildingBlocks.Outbox.Models;
 using BuildingBlocks.ProcessedEvents.Models;
 using Microsoft.EntityFrameworkCore;
-using ProposalApi.Proposal.Model;
 
 namespace ProposalApi.Data;
 

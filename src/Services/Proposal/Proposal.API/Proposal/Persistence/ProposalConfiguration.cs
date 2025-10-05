@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProposalApi.Proposal.Model;
-using ProposalApi.Proposal.Models;
 
 namespace ProposalApi.Proposal.Persistence;
 
@@ -16,11 +13,19 @@ public class ProposalConfiguration : IEntityTypeConfiguration<Models.Proposal>
         builder
             .HasKey(x => x.Id);
 
-        // builder
-        //     .HasOne<ProposalStatusLookup>()
-        //     .WithMany()
-        //     .HasForeignKey(p => p.ProposalStatus)
-        //     .HasPrincipalKey(p => p.Id);
+        builder
+            .OwnsOne(p=> p.ApprovedAmount, a =>
+            {
+                a.Property(p => p.Amount)
+                    .HasColumnName("ApprovedAmount")
+                    .HasColumnType("decimal(18,2)")
+                    .IsRequired();
+
+                a.Property(p => p.Currency)
+                    .HasColumnName("Currency")
+                    .HasMaxLength(3)
+                    .IsRequired();
+            });
 
         builder
             .Property(p => p.ProposalStatus)
@@ -40,32 +45,3 @@ public class ProposalConfiguration : IEntityTypeConfiguration<Models.Proposal>
             .HasDefaultValueSql("getdate()");
     }
 }
-
-// public class ProposalStatusLookupConfiguration : IEntityTypeConfiguration<ProposalStatusLookup>
-// {
-//     public void Configure(EntityTypeBuilder<Model.ProposalStatusLookup> builder)
-//     {
-//         builder
-//             .ToTable("ProposalStatusLookup", "bank");
-//
-//         builder
-//             .HasKey(x => x.Id);
-//
-//         // var enums = Enum.GetValues(typeof(ProposalStatus))
-//         //     .Cast<ProposalStatus>()
-//         //     .Select(e => new ProposalStatusLookup()
-//         //     {
-//         //         Id = -1 * (int)e,
-//         //         Name = e.ToString()
-//         //     });
-//
-//         builder
-//             .HasData(
-//                 new ProposalStatusLookup { Id = -1, Name = nameof(ProposalStatus.Pending) },
-//                 new ProposalStatusLookup { Id = -2, Name = nameof(ProposalStatus.UnderReview) },
-//                 new ProposalStatusLookup { Id = -3, Name = nameof(ProposalStatus.Approved) },
-//                 new ProposalStatusLookup { Id = -4, Name = nameof(ProposalStatus.Rejected) },
-//                 new ProposalStatusLookup { Id = -5, Name = nameof(ProposalStatus.Cancelled) }
-//             );
-//     }
-// }

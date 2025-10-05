@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.CQRS;
-using ProposalApi.Proposal.Model;
 using ProposalApi.Proposal.Models;
 using ProposalApi.Proposal.Persistence;
 

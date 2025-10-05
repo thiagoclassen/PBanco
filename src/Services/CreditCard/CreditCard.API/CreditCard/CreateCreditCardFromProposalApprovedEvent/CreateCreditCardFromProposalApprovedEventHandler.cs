@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.CQRS;
+using BuildingBlocks.Domain.Shared;
 using BuildingBlocks.Outbox;
 using BuildingBlocks.UnitOfWork;
 using CreditCard.API.CreditCard.Models;
@@ -6,7 +7,7 @@ using CreditCard.API.Data;
 
 namespace CreditCard.API.CreditCard.CreateCreditCardFromProposalApprovedEvent;
 
-public record CreateCreditCardFromProposalApprovedCommand(Guid ProposalId, Guid ClientId, int ApprovedAmount) : ICommand<CreateCreditCardFromProposalApprovedResponse>;
+public record CreateCreditCardFromProposalApprovedCommand(Guid ProposalId, Guid ClientId, Money ApprovedAmount) : ICommand<CreateCreditCardFromProposalApprovedResponse>;
 
 public record CreateCreditCardFromProposalApprovedResponse(Models.CreditCard CreditCard);
 

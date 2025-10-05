@@ -5,7 +5,7 @@ public record CreditCardResponse(
     Guid ClientId,
     Guid ProposalId,
     int CreditCardNumber,
-    int ExpensesLimit,
+    string ExpensesLimit,
     string CreditCardProvider,
     string CreditCardStatus,
     DateTime CreatedAt,
