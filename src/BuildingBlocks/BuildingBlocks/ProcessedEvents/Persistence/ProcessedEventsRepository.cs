@@ -7,7 +7,7 @@ public class ProcessedEventsRepository<TContext>(TContext dbContext) : IProcesse
     where TContext : DbContext
 {
     private readonly DbSet<ProcessedEvent> _dbSet = dbContext.Set<ProcessedEvent>();
-    
+
     public async Task AddAsync(ProcessedEvent processedEvent, CancellationToken cancellationToken)
     {
         await _dbSet.AddAsync(processedEvent, cancellationToken);

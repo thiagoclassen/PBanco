@@ -30,8 +30,8 @@ public class UpdateClientCommandHandler(IClientRepository repository)
     {
         var client = await repository.GetByIdAsync(command.ClientId, cancellationToken);
 
-        if (client is null) 
-            return Error.NotFound(description: $"Client with ID not found.");
+        if (client is null)
+            return Error.NotFound(description: "Client with ID not found.");
 
         client.Name = command.Name ?? client.Name;
         client.CPF = command.CPF ?? client.CPF;
@@ -49,7 +49,7 @@ public class UpdateClientCommandValidator : AbstractValidator<UpdateClientComman
     public UpdateClientCommandValidator()
     {
         //TODO - fix validator for update        
-        
+
         RuleFor(x => x.Name)
             .MaximumLength(100);
         RuleFor(x => x.Email)
@@ -73,10 +73,7 @@ public class UpdateClientCommandValidator : AbstractValidator<UpdateClientComman
         var today = DateTime.Today;
         var age = today.Year - birthDate.Value.Year;
 
-        if (birthDate.Value.Date > today.AddYears(-age))
-        {
-            age--;
-        }
+        if (birthDate.Value.Date > today.AddYears(-age)) age--;
 
         return age >= 18;
     }

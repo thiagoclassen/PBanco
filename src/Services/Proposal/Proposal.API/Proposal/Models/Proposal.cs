@@ -9,12 +9,12 @@ public class Proposal : AggregateRoot
     public Guid Id { get; init; }
     public required Guid ClientId { get; init; }
     public ProposalStatus ProposalStatus { get; set; } = ProposalStatus.Pending;
-    public Money ApprovedAmount { get; set; } = new Money(0);
+    public Money ApprovedAmount { get; set; } = new(0);
     public DateTime Requested { get; init; }
     public DateTime CreatedAt { get; init; }
     public DateTime UpdatedAt { get; set; }
-    
-   public static Proposal Create(Guid clientId)
+
+    public static Proposal Create(Guid clientId)
     {
         var proposal = new Proposal
         {
@@ -25,7 +25,7 @@ public class Proposal : AggregateRoot
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         proposal.AddDomainEvent(new ProposalCreatedEvent
         {
             EventId = Guid.NewGuid(),
@@ -36,7 +36,7 @@ public class Proposal : AggregateRoot
         });
         return proposal;
     }
-   
+
     public void Approve(Money amount)
     {
         ProposalStatus = ProposalStatus.Approved;
@@ -50,7 +50,7 @@ public class Proposal : AggregateRoot
             ApprovedAmount = ApprovedAmount
         });
     }
-    
+
     public void Cancel()
     {
         ProposalStatus = ProposalStatus.Canceled;
@@ -62,13 +62,13 @@ public class Proposal : AggregateRoot
             ClientId = ClientId
         });
     }
-    
+
     public void CancelWithoutEvent()
     {
         ProposalStatus = ProposalStatus.Canceled;
         ApprovedAmount = new Money(0);
     }
-    
+
     public void Reject()
     {
         ProposalStatus = ProposalStatus.Rejected;
@@ -81,7 +81,7 @@ public class Proposal : AggregateRoot
             ClientId = ClientId
         });
     }
-    
+
     public void UpdateStatus(ProposalStatus newStatus)
     {
         if (ProposalStatus == newStatus) return;
@@ -95,7 +95,7 @@ public class Proposal : AggregateRoot
         });
         ProposalStatus = newStatus;
     }
-    
+
     public void UpdateAmount(Money newAmount)
     {
         if (ApprovedAmount == newAmount) return;
@@ -109,7 +109,6 @@ public class Proposal : AggregateRoot
         });
         ApprovedAmount = newAmount;
     }
-
 }
 
 public enum ProposalStatus

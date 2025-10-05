@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CreditCard.API.CreditCard.GetCreditCardByIdAsync;
+namespace CreditCard.API.CreditCard.GetCreditCardById;
 
 public class GetCreditCardByIdEndpoint(ISender sender) : ApiController
 {

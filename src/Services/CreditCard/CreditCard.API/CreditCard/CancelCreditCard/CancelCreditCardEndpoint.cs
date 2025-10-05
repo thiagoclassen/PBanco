@@ -18,5 +18,4 @@ public class CancelCreditCardEndpoint(ISender sender) : ApiController
             errors => Problem(errors)
         );
     }
-
 }

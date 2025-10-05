@@ -8,60 +8,60 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="ErrorOr" Version="2.0.1" />
-      <PackageReference Include="Hangfire.AspNetCore" Version="1.8.21" />
-      <PackageReference Include="Hangfire.SqlServer" Version="1.8.21" />
-      <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.3" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.9" />
-      <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.9" />
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
+        <PackageReference Include="ErrorOr" Version="2.0.1"/>
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.21"/>
+        <PackageReference Include="Hangfire.SqlServer" Version="1.8.21"/>
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.9"/>
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.9"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
+        <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-      <Content Remove="Data\Interceptors\**" />
-      <Content Remove="Outbox\Models\**" />
-      <Content Remove="Outbox\Extension\**" />
+        <Content Include="..\..\..\..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
+        <Content Remove="Data\Interceptors\**"/>
+        <Content Remove="Outbox\Models\**"/>
+        <Content Remove="Outbox\Extension\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Data\Interceptors\CreateOutboxMessagesInterceptor.cs" />
-      <Compile Remove="Outbox\Models\OutboxMessage.cs" />
-      <Compile Remove="Data\UnitOfWork.cs" />
-      <Compile Remove="Data\Interceptors\**" />
-      <Compile Remove="Outbox\Models\**" />
-      <Compile Remove="Outbox\Extension\**" />
-      <Compile Remove="Outbox\Job\IProcessOutboxJob.cs" />
-      <Compile Remove="Outbox\Persistence\IOutboxRepository.cs" />
-      <Compile Remove="Outbox\Persistence\OutboxRepository.cs" />
-      <Compile Remove="Outbox\Jobs\IProcessOutboxJob.cs" />
+        <Compile Remove="Data\Interceptors\CreateOutboxMessagesInterceptor.cs"/>
+        <Compile Remove="Outbox\Models\OutboxMessage.cs"/>
+        <Compile Remove="Data\UnitOfWork.cs"/>
+        <Compile Remove="Data\Interceptors\**"/>
+        <Compile Remove="Outbox\Models\**"/>
+        <Compile Remove="Outbox\Extension\**"/>
+        <Compile Remove="Outbox\Job\IProcessOutboxJob.cs"/>
+        <Compile Remove="Outbox\Persistence\IOutboxRepository.cs"/>
+        <Compile Remove="Outbox\Persistence\OutboxRepository.cs"/>
+        <Compile Remove="Outbox\Jobs\IProcessOutboxJob.cs"/>
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Remove="Data\Interceptors\**" />
-      <EmbeddedResource Remove="Outbox\Models\**" />
-      <EmbeddedResource Remove="Outbox\Extension\**" />
+        <EmbeddedResource Remove="Data\Interceptors\**"/>
+        <EmbeddedResource Remove="Outbox\Models\**"/>
+        <EmbeddedResource Remove="Outbox\Extension\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Data\Interceptors\**" />
-      <None Remove="Outbox\Models\**" />
-      <None Remove="Outbox\Extension\**" />
+        <None Remove="Data\Interceptors\**"/>
+        <None Remove="Outbox\Models\**"/>
+        <None Remove="Outbox\Extension\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Consumer\" />
+        <Folder Include="Consumer\"/>
     </ItemGroup>
 
 </Project>

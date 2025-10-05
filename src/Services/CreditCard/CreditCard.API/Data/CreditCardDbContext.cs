@@ -6,10 +6,6 @@ namespace CreditCard.API.Data;
 
 public class CreditCardDbContext : DbContext
 {
-    public DbSet<CreditCard.Models.CreditCard> CreditCards { get; init; }
-    public DbSet<OutboxMessage> OutboxMessages { get; init; }
-    public DbSet<ProcessedEvent> ProcessedEvents { get; init; }
-
     public CreditCardDbContext()
     {
     }
@@ -17,7 +13,11 @@ public class CreditCardDbContext : DbContext
     public CreditCardDbContext(DbContextOptions<CreditCardDbContext> options) : base(options)
     {
     }
-    
+
+    public DbSet<CreditCard.Models.CreditCard> CreditCards { get; init; }
+    public DbSet<OutboxMessage> OutboxMessages { get; init; }
+    public DbSet<ProcessedEvent> ProcessedEvents { get; init; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder
@@ -29,7 +29,7 @@ public class CreditCardDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CreditCardDbContext).Assembly);
-        
+
         modelBuilder.Entity<OutboxMessage>().ToTable("OutboxMessages", "messaging");
         modelBuilder.Entity<ProcessedEvent>().HasKey(x => x.EventId);
         modelBuilder.Entity<ProcessedEvent>().ToTable("ProcessedEvents", "messaging");
@@ -54,9 +54,6 @@ public class CreditCardDbContext : DbContext
         var modifiedEntities = ChangeTracker.Entries()
             .Where(e => e.State == EntityState.Modified && e.Metadata.GetProperties().Any(p => p.Name == "UpdatedAt"));
 
-        foreach (var entity in modifiedEntities)
-        {
-            entity.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
-        }
+        foreach (var entity in modifiedEntities) entity.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
     }
 }

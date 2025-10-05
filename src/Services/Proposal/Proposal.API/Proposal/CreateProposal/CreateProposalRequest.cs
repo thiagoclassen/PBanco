@@ -1,5 +1,4 @@
-﻿
-namespace ProposalApi.Proposal.CreateProposal;
+﻿namespace ProposalApi.Proposal.CreateProposal;
 
 public class CreateProposalRequest
 {

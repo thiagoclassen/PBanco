@@ -6,10 +6,6 @@ namespace ProposalApi.Data;
 
 public class ProposalDbContext : DbContext
 {
-    public DbSet<Proposal.Models.Proposal> Proposals { get; init; }
-    public DbSet<OutboxMessage> OutboxMessages { get; init; }
-    public DbSet<ProcessedEvent> ProcessedEvents { get; init; }
-    
     public ProposalDbContext()
     {
     }
@@ -17,7 +13,11 @@ public class ProposalDbContext : DbContext
     public ProposalDbContext(DbContextOptions<ProposalDbContext> options) : base(options)
     {
     }
-    
+
+    public DbSet<Proposal.Models.Proposal> Proposals { get; init; }
+    public DbSet<OutboxMessage> OutboxMessages { get; init; }
+    public DbSet<ProcessedEvent> ProcessedEvents { get; init; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder
@@ -29,9 +29,9 @@ public class ProposalDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProposalDbContext).Assembly);
-        
+
         modelBuilder.Entity<OutboxMessage>().ToTable("OutboxMessages", "messaging");
-        
+
         modelBuilder.Entity<ProcessedEvent>().HasKey(x => x.EventId);
         modelBuilder.Entity<ProcessedEvent>().ToTable("ProcessedEvents", "messaging");
 
@@ -55,9 +55,6 @@ public class ProposalDbContext : DbContext
         var modifiedEntities = ChangeTracker.Entries()
             .Where(e => e.State == EntityState.Modified && e.Metadata.GetProperties().Any(p => p.Name == "UpdatedAt"));
 
-        foreach (var entity in modifiedEntities)
-        {
-                        entity.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
-        }
+        foreach (var entity in modifiedEntities) entity.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
     }
 }

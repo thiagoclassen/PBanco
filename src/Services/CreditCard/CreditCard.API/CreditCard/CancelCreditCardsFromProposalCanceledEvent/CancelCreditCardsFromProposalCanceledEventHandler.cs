@@ -7,7 +7,7 @@ namespace CreditCard.API.CreditCard.CancelCreditCardsFromProposalCanceledEvent;
 public record CancelCreditCardFromProposalCanceledEventCommand(Guid ProposalId, Guid ClientId)
     : ICommand<CancelCreditCardFromProposalCanceledEventResponse>;
 
-public record CancelCreditCardFromProposalCanceledEventResponse();
+public record CancelCreditCardFromProposalCanceledEventResponse;
 
 public class CancelCreditCardFromProposalCanceledEventCommandHandler(
     IUnitOfWork unitOfWork)

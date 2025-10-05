@@ -1,8 +1,4 @@
-﻿using System.Text.Json;
-using BuildingBlocks.Domain;
-using MassTransit;
-
-namespace BuildingBlocks.ProcessedEvents.Models;
+﻿namespace BuildingBlocks.ProcessedEvents.Models;
 
 public class ProcessedEvent
 {

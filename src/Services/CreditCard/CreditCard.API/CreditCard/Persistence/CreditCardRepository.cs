@@ -1,5 +1,4 @@
-﻿using CreditCard.API.CreditCard.GetCreditCardByIdAsync;
-using CreditCard.API.Data;
+﻿using CreditCard.API.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace CreditCard.API.CreditCard.Persistence;

@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BuildingBlocks.Outbox.Extensions;
 
-public static class BackgroundExtensions 
+public static class BackgroundExtensions
 {
     public static IApplicationBuilder UseBackgroundJobs(this WebApplication app)
     {
@@ -14,7 +14,7 @@ public static class BackgroundExtensions
             .AddOrUpdate<IProcessOutboxJob>("outbox-processor",
                 job => job.ProcessAsync(CancellationToken.None),
                 app.Configuration["BackgroundJobs:Outbox:Schedule"]);
-        
+
         return app;
     }
 }

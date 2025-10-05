@@ -9,10 +9,10 @@ public class CreditCardConfiguration : IEntityTypeConfiguration<Models.CreditCar
     {
         builder
             .ToTable("CreditCard", "bank");
-        
+
         builder
             .HasKey(c => c.Id);
-        
+
         builder
             .OwnsOne(p => p.ExpensesLimit, a =>
             {
@@ -26,7 +26,7 @@ public class CreditCardConfiguration : IEntityTypeConfiguration<Models.CreditCar
                     .HasMaxLength(3)
                     .IsRequired();
             });
-        
+
         builder
             .Property(p => p.CardStatus)
             .HasConversion<string>()

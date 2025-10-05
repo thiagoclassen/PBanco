@@ -9,8 +9,8 @@ public class CreditCard : AggregateRoot
     public Guid Id { get; init; }
     public required Guid ClientId { get; init; }
     public required Guid ProposalId { get; init; }
-    public Money ExpensesLimit { get; set; } = new Money(0);
-    public int Number { get; set; } = 0;
+    public Money ExpensesLimit { get; set; } = new(0);
+    public int Number { get; set; }
     public CardStatus CardStatus { get; set; }
     public CardProvider CardProvider { get; init; } = CardProvider.Visa; // Default provider
     public DateTime CreatedAt { get; set; }
@@ -19,7 +19,7 @@ public class CreditCard : AggregateRoot
     public void UpdateStatus(CardStatus newStatus)
     {
         if (CardStatus == newStatus) return;
-        AddDomainEvent(new CreditCardStatusChangedEvent()
+        AddDomainEvent(new CreditCardStatusChangedEvent
         {
             EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
@@ -48,7 +48,7 @@ public class CreditCard : AggregateRoot
             UpdatedAt = DateTime.UtcNow
         };
 
-        creditCard.AddDomainEvent(new CreditCardCreatedEvent()
+        creditCard.AddDomainEvent(new CreditCardCreatedEvent
         {
             EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
@@ -67,38 +67,38 @@ public class CreditCard : AggregateRoot
     public void Cancel()
     {
         if (CardStatus == CardStatus.Cancelled) return;
-        AddDomainEvent(new CreditCardCanceledEvent()
+        AddDomainEvent(new CreditCardCanceledEvent
         {
             EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
             CreditCardId = Id,
-            OldStatus = CardStatus.ToString(),
+            OldStatus = CardStatus.ToString()
         });
         CardStatus = CardStatus.Cancelled;
     }
-    
+
     public void Block()
     {
         if (CardStatus == CardStatus.Blocked) return;
-        AddDomainEvent(new CreditCardBlockedEvent()
+        AddDomainEvent(new CreditCardBlockedEvent
         {
             EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
             CreditCardId = Id,
-            OldStatus = CardStatus.ToString(),
+            OldStatus = CardStatus.ToString()
         });
         CardStatus = CardStatus.Blocked;
     }
-    
+
     public void Activate()
     {
         if (CardStatus == CardStatus.Active) return;
-        AddDomainEvent(new CreditCardActiveEvent()
+        AddDomainEvent(new CreditCardActiveEvent
         {
             EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
             CreditCardId = Id,
-            OldStatus = CardStatus.ToString(),
+            OldStatus = CardStatus.ToString()
         });
         CardStatus = CardStatus.Active;
     }

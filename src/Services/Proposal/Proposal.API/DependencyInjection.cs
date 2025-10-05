@@ -1,7 +1,4 @@
 ﻿using BuildingBlocks.Behaviors;
-using BuildingBlocks.Domain;
-using BuildingBlocks.Events.Client;
-using BuildingBlocks.Outbox;
 using BuildingBlocks.Outbox.Interceptor;
 using BuildingBlocks.Outbox.Jobs;
 using BuildingBlocks.Outbox.Persistence;
@@ -27,7 +24,7 @@ public static class DependencyInjection
         services.AddEndpointsApiExplorer();
         return services;
     }
-    
+
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(options =>
@@ -35,12 +32,12 @@ public static class DependencyInjection
             options.AddOpenBehavior(typeof(ValidationBehavior<,>));
             options.RegisterServicesFromAssembly(typeof(Program).Assembly);
         });
-        
+
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
-        
+
         return services;
     }
-    
+
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddSingleton<CreateOutboxMessagesInterceptor>();
@@ -54,23 +51,23 @@ public static class DependencyInjection
 
         services.AddMassTransitLib(services.BuildServiceProvider().GetRequiredService<IConfiguration>());
         services.AddHangfire();
-        
+
         services.AddScoped<IUnitOfWork, UnitOfWork<ProposalDbContext>>();
         services.AddScoped<IProposalRepository, ProposalRepository>();
         services.AddScoped<IProcessedEventsRepository, ProcessedEventsRepository<ProposalDbContext>>();
         services.AddScoped<IOutboxRepository, OutboxRepository<ProposalDbContext>>();
-        
+
         return services;
     }
-    
+
     private static void AddMassTransitLib(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddMassTransit((config) =>
+        services.AddMassTransit(config =>
         {
             config.SetKebabCaseEndpointNameFormatter();
-    
+
             config.AddConsumersFromNamespaceContaining<ClientCreatedConsumer>();
-            
+
             config.UsingRabbitMq((ctx, cfg) =>
             {
                 cfg.Host(configuration["EventBus:HostAddress"], h =>
@@ -78,25 +75,19 @@ public static class DependencyInjection
                     h.Username(configuration["EventBus:UserName"]!);
                     h.Password(configuration["EventBus:Password"]!);
                 });
-                
+
                 cfg.UseConsumeFilter(typeof(ProcessedEventFilter<>), ctx);
 
                 cfg.ConfigureEndpoints(ctx);
-                
-                cfg.UseMessageRetry(r =>
-                {
-                    r.Interval(3, TimeSpan.FromSeconds(10));
-                });
-                
-                //cfg.Message<ClientCreatedEvent>(x => x.SetEntityName("client-created"));
-                
+
+                cfg.UseMessageRetry(r => { r.Interval(3, TimeSpan.FromSeconds(10)); });
+
                 cfg.UseJsonSerializer();
                 cfg.UseJsonDeserializer();
             });
-            
         });
     }
-    
+
     private static void AddHangfire(this IServiceCollection services)
     {
         services.AddHangfire((serviceProvider, hangFireConfiguration) =>
@@ -109,7 +100,7 @@ public static class DependencyInjection
 
         services.AddScoped<IProcessOutboxJob, ProcessOutboxJob>();
     }
-    
+
     private static string GetConnectionString(IConfiguration configuration)
     {
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";

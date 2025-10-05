@@ -20,10 +20,10 @@ public sealed class CreateOutboxMessagesInterceptor : SaveChangesInterceptor
             .Entries<AggregateRoot>()
             .Where(x => x.Entity.DomainEvents.Any())
             .Select(x => x.Entity.DomainEvents).ToList();
-        
+
         var outboxMessagesFromDomainEvents = domainEvents
             .SelectMany(x => x)
-            .Select(domainEvent => new OutboxMessage()
+            .Select(domainEvent => new OutboxMessage
             {
                 Type = domainEvent.GetType().FullName!,
                 OccurredOn = domainEvent.OccurredOn,
@@ -32,11 +32,8 @@ public sealed class CreateOutboxMessagesInterceptor : SaveChangesInterceptor
             .ToList();
 
         context.Set<OutboxMessage>().AddRange(outboxMessagesFromDomainEvents);
-        
-        foreach (var entry in context.ChangeTracker.Entries<AggregateRoot>())
-        {
-            entry.Entity.ClearDomainEvents();
-        }
+
+        foreach (var entry in context.ChangeTracker.Entries<AggregateRoot>()) entry.Entity.ClearDomainEvents();
 
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }

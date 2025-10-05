@@ -12,10 +12,9 @@ public class UpdateProposalEndpoint(ISender sender) : ApiController
         [FromBody] UpdateProposalRequest request,
         CancellationToken cancellationToken)
     {
-
         var command = new UpdateProposalCommand(proposalId, request.Amount);
         var result = await sender.Send(command, cancellationToken);
-        
+
         return result.Match(
             _ => Ok(result.Value),
             errors => Problem(errors)

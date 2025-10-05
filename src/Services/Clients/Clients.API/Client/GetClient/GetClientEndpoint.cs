@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace Clients.API.Client.GetClient;
 
 public class GetClientEndpoint(ISender sender) : ApiController

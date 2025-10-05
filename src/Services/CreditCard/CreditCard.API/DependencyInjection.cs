@@ -1,6 +1,4 @@
 ﻿using BuildingBlocks.Behaviors;
-using BuildingBlocks.Events.Client;
-using BuildingBlocks.Outbox;
 using BuildingBlocks.Outbox.Interceptor;
 using BuildingBlocks.Outbox.Jobs;
 using BuildingBlocks.Outbox.Persistence;
@@ -27,7 +25,7 @@ public static class DependencyInjection
         services.AddSwaggerGen();
         return services;
     }
-    
+
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(options =>
@@ -40,7 +38,7 @@ public static class DependencyInjection
 
         return services;
     }
-    
+
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddSingleton<CreateOutboxMessagesInterceptor>();
@@ -62,7 +60,7 @@ public static class DependencyInjection
 
         return services;
     }
-    
+
     private static void AddHangfire(this IServiceCollection services)
     {
         services.AddHangfire((serviceProvider, hangFireConfiguration) =>
@@ -75,7 +73,7 @@ public static class DependencyInjection
 
         services.AddScoped<IProcessOutboxJob, ProcessOutboxJob>();
     }
-    
+
     private static void AddMassTransitLib(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMassTransit(config =>
@@ -94,14 +92,13 @@ public static class DependencyInjection
 
                 cfg.ConfigureEndpoints(ctx);
                 cfg.UseConsumeFilter(typeof(ProcessedEventFilter<>), ctx);
-                //cfg.Message<ClientCreatedEvent>(x => x.SetEntityName("client-created"));
 
                 cfg.UseJsonSerializer();
                 cfg.UseJsonDeserializer();
             });
         });
     }
-    
+
     private static string GetConnectionString(IConfiguration configuration)
     {
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";

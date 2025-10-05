@@ -7,10 +7,6 @@ namespace Clients.API.Data;
 
 public class ClientDbContext : DbContext
 {
-    public DbSet<BankClient> Clients { get; init; }
-    public DbSet<OutboxMessage> OutboxMessages { get; init; }
-    public DbSet<ProcessedEvent> ProcessedEvents { get; init; }
-
     public ClientDbContext()
     {
     }
@@ -18,6 +14,10 @@ public class ClientDbContext : DbContext
     public ClientDbContext(DbContextOptions<ClientDbContext> options) : base(options)
     {
     }
+
+    public DbSet<BankClient> Clients { get; init; }
+    public DbSet<OutboxMessage> OutboxMessages { get; init; }
+    public DbSet<ProcessedEvent> ProcessedEvents { get; init; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -56,12 +56,9 @@ public class ClientDbContext : DbContext
         var modifiedEntities = ChangeTracker.Entries()
             .Where(e => e.State == EntityState.Modified && e.Metadata.GetProperties().Any(p => p.Name == "UpdatedAt"));
 
-        foreach (var entity in modifiedEntities)
-        {
-            entity.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
-        }
+        foreach (var entity in modifiedEntities) entity.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
     }
-    
+
     private void SoftDeleteEntities()
     {
         var deletedEntities = ChangeTracker.Entries()

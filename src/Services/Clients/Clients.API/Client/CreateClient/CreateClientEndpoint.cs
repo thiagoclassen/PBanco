@@ -8,7 +8,7 @@ public class CreateClientEndpoint(ISender sender) : ApiController
 {
     [HttpPost("/api/clients")]
     public async Task<IActionResult> CreateClient(
-        [FromBody] CreateClientRequest request, 
+        [FromBody] CreateClientRequest request,
         CancellationToken cancellationToken)
     {
         var command = request.MapToCreateClientCommand();

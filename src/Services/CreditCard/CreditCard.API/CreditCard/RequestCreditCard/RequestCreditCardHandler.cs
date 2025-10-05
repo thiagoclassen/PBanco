@@ -7,8 +7,8 @@ using FluentValidation;
 namespace CreditCard.API.CreditCard.RequestCreditCard;
 
 public record RequestCreditCardCommand(
-    Guid ClientId, 
-    Guid ProposalId, 
+    Guid ClientId,
+    Guid ProposalId,
     Money ExpensesLimit,
     CardProvider CardProvider)
     : ICommand<ErrorOr<Models.CreditCard>>;
@@ -16,12 +16,14 @@ public record RequestCreditCardCommand(
 public record RequestCreditCardResponse(Guid CreditCardId);
 
 public class RequestCreditCardCommandHandler(ICreditCardRepository repository)
-:ICommandHandler<RequestCreditCardCommand, ErrorOr<Models.CreditCard>>
+    : ICommandHandler<RequestCreditCardCommand, ErrorOr<Models.CreditCard>>
 {
-    public async Task<ErrorOr<Models.CreditCard>> Handle(RequestCreditCardCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Models.CreditCard>> Handle(RequestCreditCardCommand command,
+        CancellationToken cancellationToken)
     {
-        var creditCard = Models.CreditCard.Create(command.ClientId, command.ProposalId, command.ExpensesLimit, command.CardProvider);
-        
+        var creditCard = Models.CreditCard.Create(command.ClientId, command.ProposalId, command.ExpensesLimit,
+            command.CardProvider);
+
         await repository.RequestCreditCardAsync(creditCard, cancellationToken);
 
         return creditCard;

@@ -1,6 +1,7 @@
 ﻿using BuildingBlocks.CQRS;
 using BuildingBlocks.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
+using ProposalApi.Proposal.Models;
 
 namespace ProposalApi.Proposal.CancelProposalByClientDeletedEvent;
 
@@ -16,13 +17,10 @@ public class CancelProposalByClientDeletedCommandEventHandler(IUnitOfWork unitOf
         CancelProposalByClientDeletedEventCommand command, CancellationToken cancellationToken)
     {
         var proposals = await unitOfWork.Context.Set<Models.Proposal>()
-            .Where(p => p.ClientId == command.ClientId && p.ProposalStatus != Models.ProposalStatus.Canceled)
+            .Where(p => p.ClientId == command.ClientId && p.ProposalStatus != ProposalStatus.Canceled)
             .ToListAsync(cancellationToken);
 
-        foreach (var proposal in proposals)
-        {
-            proposal.CancelWithoutEvent();
-        }
+        foreach (var proposal in proposals) proposal.CancelWithoutEvent();
 
         unitOfWork.Context.UpdateRange(proposals);
 

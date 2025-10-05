@@ -21,12 +21,12 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=yourStrong(!)Password
-#    healthcheck:
-#      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "yourStrong(!)Password" -Q "SELECT 1" -b -o /dev/null
-#      interval: 10s
-#      timeout: 3s
-#      retries: 10
-#      start_period: 10s
+    #    healthcheck:
+    #      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "yourStrong(!)Password" -Q "SELECT 1" -b -o /dev/null
+    #      interval: 10s
+    #      timeout: 3s
+    #      retries: 10
+    #      start_period: 10s
     ports:
       - '1433:1433'
   client.api:
@@ -47,9 +47,9 @@ services:
     depends_on:
       pbanco.queue:
         condition: service_healthy
-#    depends_on:
-#     client.db:
-#      condition: service_healthy
+  #    depends_on:
+  #     client.db:
+  #      condition: service_healthy
   proposal.api:
     image: proposal.api
     build:

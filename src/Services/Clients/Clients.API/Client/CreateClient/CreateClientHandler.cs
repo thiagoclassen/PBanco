@@ -6,9 +6,9 @@ using FluentValidation;
 namespace Clients.API.Client.CreateClient;
 
 public record CreateClientCommand(
-    string Name, 
-    string Email, 
-    string CPF, 
+    string Name,
+    string Email,
+    string CPF,
     DateTime BirthDate)
     : ICommand<ErrorOr<BankClient>>;
 
@@ -53,13 +53,11 @@ public class CreateClientCommandValidator : AbstractValidator<CreateClientComman
 
     private static bool BeAtLeast18YearsOld(DateTime birthDate)
     {
+        // Todo check this Age validator
         var today = DateTime.Today;
         var age = today.Year - birthDate.Year;
 
-        if (birthDate.Date > today.AddYears(-age))
-        {
-            age--;
-        }
+        if (birthDate.Date > today.AddYears(-age)) age--;
 
         return age >= 18;
     }

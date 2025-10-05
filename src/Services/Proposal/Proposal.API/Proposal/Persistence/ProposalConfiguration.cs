@@ -14,7 +14,7 @@ public class ProposalConfiguration : IEntityTypeConfiguration<Models.Proposal>
             .HasKey(x => x.Id);
 
         builder
-            .OwnsOne(p=> p.ApprovedAmount, a =>
+            .OwnsOne(p => p.ApprovedAmount, a =>
             {
                 a.Property(p => p.Amount)
                     .HasColumnName("ApprovedAmount")

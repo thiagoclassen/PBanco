@@ -1,6 +1,4 @@
-﻿using BuildingBlocks.Events.CreditCard;
-
-namespace BuildingBlocks.Domain;
+﻿namespace BuildingBlocks.Domain;
 
 public abstract class AggregateRoot
 {
@@ -13,5 +11,8 @@ public abstract class AggregateRoot
         _domainEvents.Add(domainEvent);
     }
 
-    public void ClearDomainEvents() => _domainEvents.Clear();
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
+    }
 }
