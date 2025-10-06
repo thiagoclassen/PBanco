@@ -88,7 +88,7 @@ namespace Clients.API.Data.Migrations
 
                     b.Property<string>("CPF")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -100,7 +100,7 @@ namespace Clients.API.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -115,6 +115,12 @@ namespace Clients.API.Data.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CPF")
+                        .IsUnique();
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Clients", "bank");
                 });

@@ -15,7 +15,7 @@ public class RejectProposalEndpoint(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
 
         return result.Match(
-            _ => NoContent(),
+            _ => Ok(result.Value),
             errors => Problem(errors)
         );
     }

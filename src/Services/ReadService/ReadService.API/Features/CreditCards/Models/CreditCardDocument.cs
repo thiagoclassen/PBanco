@@ -14,15 +14,11 @@ public class CreditCardDocument
     [BsonRepresentation(BsonType.String)]
     public Guid ClientId { get; init; }
 
-    [BsonElement("proposalId")]
-    [BsonRepresentation(BsonType.String)]
-    public Guid ProposalId { get; init; }
-
     [BsonElement("expensesLimit")]
     public MoneyDocument ExpensesLimit { get; set; } = new MoneyDocument(0);
 
     [BsonElement("number")]
-    public int Number { get; set; }
+    public int? Number { get; set; }
 
     [BsonElement("cardStatus")]
     public string CardStatus { get; set; } = "Inactive";

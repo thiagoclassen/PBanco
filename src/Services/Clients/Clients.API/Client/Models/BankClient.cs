@@ -1,5 +1,5 @@
 ﻿using BuildingBlocks.Domain;
-using BuildingBlocks.Events.Client;
+using BuildingBlocks.Domain.Events.Client;
 
 namespace Clients.API.Client.Models;
 
@@ -24,7 +24,10 @@ public class BankClient : AggregateRoot
             Name = name,
             Email = email,
             CPF = cpf,
-            BirthDate = birthDate
+            BirthDate = birthDate,
+            IsDeleted = false,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
 
         client.AddDomainEvent(new ClientCreatedEvent

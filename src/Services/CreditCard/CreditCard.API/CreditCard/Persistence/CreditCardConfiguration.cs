@@ -12,6 +12,14 @@ public class CreditCardConfiguration : IEntityTypeConfiguration<Models.CreditCar
 
         builder
             .HasKey(c => c.Id);
+        
+        builder
+            .Property(c => c.Number)
+            .IsRequired(false);
+        
+        builder
+            .HasIndex(c => c.Number)
+            .IsUnique();
 
         builder
             .OwnsOne(p => p.ExpensesLimit, a =>
@@ -28,13 +36,15 @@ public class CreditCardConfiguration : IEntityTypeConfiguration<Models.CreditCar
             });
 
         builder
-            .Property(p => p.CardStatus)
+            .Property(p => p.Status)
             .HasConversion<string>()
             .HasMaxLength(25);
+        
         builder
             .Property(p => p.CardProvider)
             .HasConversion<string>()
             .HasMaxLength(25);
+        
         builder
             .Property(p => p.CreatedAt)
             .HasDefaultValueSql("getdate()");

@@ -16,6 +16,14 @@ public class ClientConfiguration : IEntityTypeConfiguration<BankClient>
 
         builder
             .HasKey(x => x.Id);
+        
+        builder
+            .HasIndex(c => c.CPF)
+            .IsUnique();
+        
+        builder
+            .HasIndex(c => c.Email)
+            .IsUnique();
 
         builder
             .Property(p => p.CreatedAt)

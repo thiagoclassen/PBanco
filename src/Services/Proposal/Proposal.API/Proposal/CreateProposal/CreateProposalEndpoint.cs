@@ -15,7 +15,7 @@ public class CreateProposalEndpoint(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
 
         return result.Match(
-            _ => Created($"/api/proposals/{result.Value.Id}", result.Value.MapToProposalResponse()),
+            _ => Created($"/api/proposals/{result.Value.Id}", result.Value),
             errors => Problem(errors)
         );
     }

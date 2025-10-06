@@ -14,10 +14,10 @@ public class ProposalRepository(MongoDbContext context) : IProposalRepository
         return await _collection.Find(p => p.Id == id).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<ProposalDocument>> ListByClientIdAsync(Guid clientId,
+    public async Task<IEnumerable<ProposalDocument>> ListByCreditCardIdAsync(Guid clientId,
         CancellationToken cancellationToken)
     {
-        return await _collection.Find(p => p.ClientId == clientId).ToListAsync(cancellationToken);
+        return await _collection.Find(p => p.CreditCardId == clientId).ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<ProposalDocument>> ListAsync(CancellationToken cancellationToken)

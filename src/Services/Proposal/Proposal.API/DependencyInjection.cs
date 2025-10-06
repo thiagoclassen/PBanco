@@ -66,7 +66,7 @@ public static class DependencyInjection
         {
             config.SetKebabCaseEndpointNameFormatter();
 
-            config.AddConsumersFromNamespaceContaining<ClientCreatedConsumer>();
+            config.AddConsumersFromNamespaceContaining<CreditCardCreatedConsumer>();
 
             config.UsingRabbitMq((ctx, cfg) =>
             {

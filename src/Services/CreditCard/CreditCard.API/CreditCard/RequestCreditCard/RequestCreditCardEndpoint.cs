@@ -11,10 +11,10 @@ public class RequestCreditCardEndpoint(ISender sender) : ApiController
         [FromBody] CreditCardRequest request,
         CancellationToken cancellationToken)
     {
-        var command = request.MapToCreditCardCommand();
+        var command = new RequestCreditCardCommand(request.ClientId, request.CardProvider);
         var result = await sender.Send(command, cancellationToken);
         return result.Match(
-            creditCard => Created($"/api/credit-cards/{creditCard.Id}", creditCard.MapToCreditCardResponse()),
+            creditCard => Created($"/api/credit-cards/{creditCard.Id}", creditCard),
             errors => Problem(errors)
         );
     }

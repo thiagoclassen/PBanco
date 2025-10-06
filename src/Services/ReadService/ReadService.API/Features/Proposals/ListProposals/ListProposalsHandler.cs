@@ -5,7 +5,7 @@ using ReadService.API.Features.Proposals.Repository;
 
 namespace ReadService.API.Features.Proposals.ListProposals;
 
-public record ListProposalsQuery(Guid? ClientId) : IQuery<ErrorOr<IEnumerable<ProposalResponse>>>;
+public record ListProposalsQuery() : IQuery<ErrorOr<IEnumerable<ProposalResponse>>>;
 
 public class ListProposalsQueryHandler(IProposalRepository repository)
     : IQueryHandler<ListProposalsQuery, ErrorOr<IEnumerable<ProposalResponse>>>
@@ -13,15 +13,10 @@ public class ListProposalsQueryHandler(IProposalRepository repository)
     public async Task<ErrorOr<IEnumerable<ProposalResponse>>> Handle(ListProposalsQuery query,
         CancellationToken cancellationToken)
     {
-        IEnumerable<ProposalDocument> results;
-
-        if (query.ClientId is not null)
-            results = await repository.ListByClientIdAsync(query.ClientId.Value, cancellationToken);
-        else
-            results = await repository.ListAsync(cancellationToken);
+        var results = await repository.ListAsync(cancellationToken);
 
         return results.Select(r => new ProposalResponse(r.Id,
-                r.ClientId,
+                r.CreditCardId,
                 r.ProposalStatus,
                 r.ApprovedAmount.ToString()!))
             .ToList();

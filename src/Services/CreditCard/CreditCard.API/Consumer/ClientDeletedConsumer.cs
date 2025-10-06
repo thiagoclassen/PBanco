@@ -1,4 +1,4 @@
-﻿using BuildingBlocks.Events.Client;
+﻿using BuildingBlocks.Domain.Events.Client;
 using CreditCard.API.CreditCard.CancelCreditCardsFromClientCanceledEvent;
 using MassTransit;
 using MediatR;

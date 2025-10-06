@@ -83,23 +83,18 @@ namespace ProposalApi.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<string>("ProposalStatus")
+                    b.Property<Guid>("CreditCardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
-
-                    b.Property<DateTime>("Requested")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()

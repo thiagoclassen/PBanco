@@ -40,11 +40,13 @@ public class CreateClientEndpointTest
             CPF = clientRequest.CPF,
             BirthDate = clientRequest.BirthDate
         };
+        
+        var clientResult = new CreateClientResult(clientId);
 
         var createClientResult = new CreateClientResult(clientId);
 
         _sender.Send(Arg.Any<CreateClientCommand>(), Arg.Any<CancellationToken>())
-            .Returns(client.ToErrorOr());
+            .Returns(clientResult.ToErrorOr());
         // Act
         var result = (CreatedResult)await _endpoint.CreateClient(clientRequest, CancellationToken.None);
 
@@ -69,7 +71,7 @@ public class CreateClientEndpointTest
         //var createClientResult = new CreateClientResult(Guid.NewGuid());
 
         _sender.Send(Arg.Any<CreateClientCommand>(), Arg.Any<CancellationToken>())
-            .Returns(Error.Validation().ToErrorOr<BankClient>());
+            .Returns(Error.Validation().ToErrorOr<CreateClientResult>());
         // Act
         var result = (ObjectResult)await _endpoint.CreateClient(clientRequest, CancellationToken.None);
 

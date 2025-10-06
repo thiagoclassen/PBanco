@@ -1,4 +1,5 @@
 ﻿using BuildingBlocks.CQRS;
+using BuildingBlocks.Domain.Exceptions;
 using Clients.API.Client.Models;
 using Clients.API.Client.Persistence;
 using FluentValidation;
@@ -10,20 +11,26 @@ public record CreateClientCommand(
     string Email,
     string CPF,
     DateTime BirthDate)
-    : ICommand<ErrorOr<BankClient>>;
+    : ICommand<ErrorOr<CreateClientResult>>;
 
 public record CreateClientResult(Guid ClientId);
 
 public class CreateClientCommandHandler(IClientRepository repository)
-    : ICommandHandler<CreateClientCommand, ErrorOr<BankClient>>
+    : ICommandHandler<CreateClientCommand, ErrorOr<CreateClientResult>>
 {
-    public async Task<ErrorOr<BankClient>> Handle(CreateClientCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<CreateClientResult>> Handle(CreateClientCommand command, CancellationToken cancellationToken)
     {
+       
+        if (await repository.ExistsByCpfAsync(command.CPF, cancellationToken))
+            return Error.Conflict("Client.CPF.AlreadyExists", $"Client with CPF {command.CPF} already exists.");
+        
+        if (await repository.ExistsByEmailAsync(command.Email, cancellationToken))
+            return Error.Conflict("Client.Email.AlreadyExists", $"Client with email {command.Email} already exists.");
+        
         var client = BankClient.Create(command.Name, command.Email, command.CPF, command.BirthDate);
-
         await repository.AddAsync(client, cancellationToken);
-
-        return client;
+        
+        return new CreateClientResult(client.Id);
     }
 }
 

@@ -1,4 +1,4 @@
-﻿using BuildingBlocks.Events.Client;
+﻿using BuildingBlocks.Domain.Events.Client;
 using MassTransit;
 using ReadService.API.Features.ClientCreditCardView.Repository;
 using ReadService.API.Features.Clients.Models;

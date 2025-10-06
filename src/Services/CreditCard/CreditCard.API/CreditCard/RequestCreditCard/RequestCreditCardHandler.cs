@@ -8,25 +8,33 @@ namespace CreditCard.API.CreditCard.RequestCreditCard;
 
 public record RequestCreditCardCommand(
     Guid ClientId,
-    Guid ProposalId,
-    Money ExpensesLimit,
-    CardProvider CardProvider)
-    : ICommand<ErrorOr<Models.CreditCard>>;
+    string CardProvider)
+    : ICommand<ErrorOr<RequestCreditCardResponse>>;
 
-public record RequestCreditCardResponse(Guid CreditCardId);
+public record RequestCreditCardResponse(
+    Guid Id,
+    Guid ClientId,
+    string Status,
+    string CardProvider,
+    int? Number,
+    string ExpensesLimit,
+    DateTime UpdatedAt);
 
 public class RequestCreditCardCommandHandler(ICreditCardRepository repository)
-    : ICommandHandler<RequestCreditCardCommand, ErrorOr<Models.CreditCard>>
+    : ICommandHandler<RequestCreditCardCommand, ErrorOr<RequestCreditCardResponse>>
 {
-    public async Task<ErrorOr<Models.CreditCard>> Handle(RequestCreditCardCommand command,
+    public async Task<ErrorOr<RequestCreditCardResponse>> Handle(RequestCreditCardCommand command,
         CancellationToken cancellationToken)
     {
-        var creditCard = Models.CreditCard.Create(command.ClientId, command.ProposalId, command.ExpensesLimit,
-            command.CardProvider);
+        var creditCard = Models.CreditCard.Create(
+            command.ClientId,
+            Enum.Parse<CardProvider>(command.CardProvider));
 
         await repository.RequestCreditCardAsync(creditCard, cancellationToken);
 
-        return creditCard;
+        return new RequestCreditCardResponse(creditCard.Id, creditCard.ClientId, creditCard.Status.ToString(),
+            creditCard.CardProvider.ToString(), creditCard.Number, creditCard.ExpensesLimit.ToString(),
+            creditCard.UpdatedAt);;
     }
 }
 
@@ -36,11 +44,8 @@ public class RequestCreditCardCommandValidator : AbstractValidator<RequestCredit
     {
         RuleFor(x => x.ClientId)
             .NotEmpty().WithMessage("ClientId is required.");
-        RuleFor(x => x.ProposalId)
-            .NotEmpty().WithMessage("ProposalId is required.");
-        RuleFor(x => x.ExpensesLimit.Amount)
-            .GreaterThan(0).WithMessage("ExpensesLimit must be greater than zero.");
         RuleFor(x => x.CardProvider)
-            .IsInEnum().WithMessage("Invalid CardProvider.");
+            .Must(cardProvider => Enum.TryParse(typeof(CardProvider), cardProvider, true, out _))
+            .WithMessage($"Provider must be: {string.Join(", ", Enum.GetNames(typeof(CardProvider)))}");
     }
 }

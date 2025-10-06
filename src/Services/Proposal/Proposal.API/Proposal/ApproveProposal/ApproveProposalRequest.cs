@@ -2,5 +2,6 @@
 
 public class ApproveProposalRequest
 {
-    public int ApprovedAmount { get; init; }
+    public decimal ApprovedAmount { get; init; }
+    public string? ApprovedCurrency { get; init; } = "BRL";
 }

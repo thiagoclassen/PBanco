@@ -1,24 +1,24 @@
 ﻿using BuildingBlocks.CQRS;
 using BuildingBlocks.UnitOfWork;
+using CreditCard.API.CreditCard.Models;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace CreditCard.API.CreditCard.CancelCreditCardsFromClientCanceledEvent;
 
 public record CancelCreditCardsFromClientCanceledEventCommand(Guid ClientId)
-    : ICommand<CancelCreditCardsFromClientCanceledEventEventResponse>;
-
-public record CancelCreditCardsFromClientCanceledEventEventResponse;
+    : ICommand<Unit>;
 
 public class CancelCreditCardsFromClientCanceledEventCommandHandler(
     IUnitOfWork unitOfWork)
-    : ICommandHandler<CancelCreditCardsFromClientCanceledEventCommand,
-        CancelCreditCardsFromClientCanceledEventEventResponse>
+    : ICommandHandler<CancelCreditCardsFromClientCanceledEventCommand, Unit>
 {
-    public async Task<CancelCreditCardsFromClientCanceledEventEventResponse> Handle(
+    public async Task<Unit> Handle(
         CancelCreditCardsFromClientCanceledEventCommand request, CancellationToken cancellationToken)
     {
         var cards = await unitOfWork.Context.Set<Models.CreditCard>()
-            .Where(c => c.ClientId == request.ClientId)
+            .Where(c => c.ClientId == request.ClientId && c.Status != CardStatus.Rejected &&
+                        c.Status != CardStatus.Canceled)
             .ToListAsync(cancellationToken);
 
         if (cards is null || !cards.Any())
@@ -28,6 +28,6 @@ public class CancelCreditCardsFromClientCanceledEventCommandHandler(
 
         unitOfWork.Context.UpdateRange(cards);
 
-        return new CancelCreditCardsFromClientCanceledEventEventResponse();
+        return Unit.Value;
     }
 }

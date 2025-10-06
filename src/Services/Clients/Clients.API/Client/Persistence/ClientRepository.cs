@@ -1,5 +1,6 @@
 ﻿using Clients.API.Client.Models;
 using Clients.API.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Clients.API.Client.Persistence;
 
@@ -9,6 +10,16 @@ public class ClientRepository(ClientDbContext dbContext) : IClientRepository
     {
         await dbContext.Clients.AddAsync(client, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> ExistsByCpfAsync(string cpf, CancellationToken cancellationToken)
+    {
+        return await dbContext.Clients.AnyAsync(c => c.CPF == cpf, cancellationToken);
+    }
+
+    public async Task<bool> ExistsByEmailAsync(string email, CancellationToken cancellationToken)
+    {
+        return await dbContext.Clients.AnyAsync(c => c.Email == email, cancellationToken);
     }
 
     public async Task<BankClient?> GetByIdAsync(Guid clientId, CancellationToken cancellationToken)

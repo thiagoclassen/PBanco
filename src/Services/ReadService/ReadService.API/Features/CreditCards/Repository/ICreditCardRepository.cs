@@ -9,11 +9,5 @@ public interface ICreditCardRepository
     Task<IEnumerable<CreditCardDocument>> ListAsync(CancellationToken cancellationToken);
     Task<IEnumerable<CreditCardDocument>> ListByClientIdAsync(Guid clientId, CancellationToken cancellationToken);
 
-    Task<IEnumerable<CreditCardDocument>> ListByProposalIdAsync(Guid proposalId,
-        CancellationToken cancellationToken);
-
-    Task<IEnumerable<CreditCardDocument>> ListByClientIdAndProposalIdAsync(Guid clientId, Guid proposalId,
-        CancellationToken cancellationToken);
-
     Task InsertOrUpdateAsync(CreditCardDocument card, CancellationToken cancellationToken);
 }

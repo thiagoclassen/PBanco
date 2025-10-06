@@ -11,11 +11,11 @@ public class CreateClientEndpoint(ISender sender) : ApiController
         [FromBody] CreateClientRequest request,
         CancellationToken cancellationToken)
     {
-        var command = request.MapToCreateClientCommand();
+        var command = new CreateClientCommand(request.Name, request.Email, request.CPF, request.BirthDate);
         var result = await sender.Send(command, cancellationToken);
 
         return result.Match(
-            _ => Created($"/api/clients/{result.Value.Id}", result.Value.MapToCreateClientResult()),
+            client => Created($"/api/clients/{client.ClientId}", client),
             errors => Problem(errors)
         );
     }

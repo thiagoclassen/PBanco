@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Http;
+﻿using BuildingBlocks.Domain.Shared;
+using BuildingBlocks.Http;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +13,12 @@ public class ApproveProposalEndpoint(ISender sender) : ApiController
         [FromBody] ApproveProposalRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new ApproveProposalCommand(id, request.ApprovedAmount);
+        
+        var command = new ApproveProposalCommand(id, request.ApprovedAmount, request.ApprovedCurrency!);
         var result = await sender.Send(command, cancellationToken);
 
         return result.Match(
-            _ => NoContent(),
+            _ => Ok(result.Value),
             errors => Problem(errors)
         );
     }

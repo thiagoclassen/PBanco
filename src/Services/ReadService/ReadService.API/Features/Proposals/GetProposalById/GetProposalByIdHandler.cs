@@ -5,7 +5,7 @@ namespace ReadService.API.Features.Proposals.GetProposalById;
 
 public record GetProposalByIdQuery(Guid ProposalId) : IQuery<ErrorOr<ProposalResponse?>>;
 
-public record ProposalResponse(Guid Id, Guid ClientId, string Status, string ApprovedAmmount);
+public record ProposalResponse(Guid Id, Guid CreditCardId, string Status, string ApprovedAmmount);
 
 public class GetProposalByIdQueryHandler(IProposalRepository repository)
     : IQueryHandler<GetProposalByIdQuery, ErrorOr<ProposalResponse?>>
@@ -18,7 +18,7 @@ public class GetProposalByIdQueryHandler(IProposalRepository repository)
 
         return new ProposalResponse(
             result.Id,
-            result.ClientId,
+            result.CreditCardId,
             result.ProposalStatus,
             result.ApprovedAmount.ToString()!);
     }

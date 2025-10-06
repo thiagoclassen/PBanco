@@ -88,11 +88,6 @@ namespace CreditCard.API.Data.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("CardStatus")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uniqueidentifier");
 
@@ -101,11 +96,13 @@ namespace CreditCard.API.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int>("Number")
+                    b.Property<int?>("Number")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ProposalId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -113,6 +110,10 @@ namespace CreditCard.API.Data.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Number")
+                        .IsUnique()
+                        .HasFilter("[Number] IS NOT NULL");
 
                     b.ToTable("CreditCard", "bank");
                 });

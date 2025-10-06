@@ -21,15 +21,4 @@ public class ProposalRepository(ProposalDbContext dbContext) : IProposalReposito
         dbContext.Proposals.Update(proposal);
         await dbContext.SaveChangesAsync(cancellationToken);
     }
-
-    public async Task<List<Models.Proposal>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        return await dbContext.Proposals.ToListAsync(cancellationToken);
-    }
-
-    public async Task<List<Models.Proposal>> GetByUserIdAsync(Guid userId,
-        CancellationToken cancellationToken)
-    {
-        return await dbContext.Proposals.Where(p => p.ClientId == userId).ToListAsync(cancellationToken);
-    }
 }

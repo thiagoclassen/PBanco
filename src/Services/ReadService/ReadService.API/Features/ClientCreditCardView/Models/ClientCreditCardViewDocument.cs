@@ -16,7 +16,7 @@ public class ClientCreditCardViewDocument
 
 public class CardSummary
 {
-    public int Number { get; set; }
+    public int? Number { get; set; }
     public string Provider { get; set; } = null!;
     public string Status { get; set; } = null!;
 }

@@ -12,7 +12,7 @@ public class ListCreditCardsEndpoint(ISender sender) : ApiController
         [FromQuery] Guid? proposalId,
         CancellationToken cancellationToken)
     {
-        var query = new ListCreditCardsQuery(clientId, proposalId);
+        var query = new ListCreditCardsQuery(clientId);
         var result = await sender.Send(query, cancellationToken);
 
         return result.Match(

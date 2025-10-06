@@ -1,27 +1,29 @@
 ﻿using BuildingBlocks.Domain;
+using BuildingBlocks.Domain.Events.Proposal;
 using BuildingBlocks.Domain.Shared;
-using BuildingBlocks.Events.Proposal;
+using ProposalApi.Proposal.Exceptions;
 
 namespace ProposalApi.Proposal.Models;
 
 public class Proposal : AggregateRoot
 {
     public Guid Id { get; init; }
-    public required Guid ClientId { get; init; }
-    public ProposalStatus ProposalStatus { get; set; } = ProposalStatus.Pending;
+
+    // public required Guid ClientId { get; init; }
+    public required Guid CreditCardId { get; init; }
+    public ProposalStatus Status { get; set; } = ProposalStatus.Pending;
     public Money ApprovedAmount { get; set; } = new(0.0m);
-    public DateTime Requested { get; init; }
     public DateTime CreatedAt { get; init; }
     public DateTime UpdatedAt { get; set; }
 
-    public static Proposal Create(Guid clientId)
+    public static Proposal Create(Guid creditCardId)
     {
         var proposal = new Proposal
         {
             Id = Guid.NewGuid(),
-            ClientId = clientId,
-            ProposalStatus = ProposalStatus.Pending,
-            Requested = DateTime.UtcNow,
+            // ClientId = clientId,
+            CreditCardId = creditCardId,
+            Status = ProposalStatus.Pending,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -31,8 +33,9 @@ public class Proposal : AggregateRoot
             EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
             ProposalId = proposal.Id,
-            ClientId = proposal.ClientId,
-            ProposalStatus = proposal.ProposalStatus.ToString()
+            CreditCardId = proposal.CreditCardId,
+            // ClientId = proposal.ClientId,
+            ProposalStatus = proposal.Status.ToString()
         });
         proposal.AddDomainEvent(proposal.CreatePropagateEvent());
 
@@ -41,70 +44,55 @@ public class Proposal : AggregateRoot
 
     public void Approve(Money amount)
     {
-        ProposalStatus = ProposalStatus.Approved;
+        ValidateTransition(ProposalStatus.Approved);
+        Status = ProposalStatus.Approved;
         ApprovedAmount = amount;
         AddDomainEvent(new ProposalApprovedEvent
         {
             EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
             ProposalId = Id,
-            ClientId = ClientId,
+            CreditCardId = CreditCardId,
+            // ClientId = ClientId,
             ApprovedAmount = ApprovedAmount
         });
         AddDomainEvent(CreatePropagateEvent());
     }
 
-    public void Cancel()
-    {
-        ProposalStatus = ProposalStatus.Canceled;
-        AddDomainEvent(new ProposalCanceledEvent
-        {
-            EventId = Guid.NewGuid(),
-            OccurredOn = DateTime.UtcNow,
-            ProposalId = Id,
-            ClientId = ClientId
-        });
-        AddDomainEvent(CreatePropagateEvent());
-    }
-
-    // For when the user is deleted we only propagate the proposal change since the credit card service will also consume the ClientDeletedEvent
-    public void CancelWithPropagateEvent()
-    {
-        ProposalStatus = ProposalStatus.Canceled;
-        AddDomainEvent(CreatePropagateEvent());
-    }
-
     public void Reject()
     {
-        ProposalStatus = ProposalStatus.Rejected;
+        ValidateTransition(ProposalStatus.Rejected);
+        Status = ProposalStatus.Rejected;
         AddDomainEvent(new ProposalRejectedEvent
         {
             EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
             ProposalId = Id,
-            ClientId = ClientId
+            CreditCardId = CreditCardId
+            // ClientId = ClientId
         });
         AddDomainEvent(CreatePropagateEvent());
     }
 
-    public void UpdateStatus(ProposalStatus newStatus)
-    {
-        if (ProposalStatus == newStatus) return;
-        AddDomainEvent(new ProposalStatusChangedEvent
-        {
-            EventId = Guid.NewGuid(),
-            OccurredOn = DateTime.UtcNow,
-            ProposalId = Id,
-            OldStatus = ProposalStatus.ToString(),
-            NewStatus = newStatus.ToString()
-        });
-        ProposalStatus = newStatus;
-        AddDomainEvent(CreatePropagateEvent());
-    }
+    // public void Convert()
+    // {
+    //     ValidateTransition(ProposalStatus.Converted);
+    //     Status = ProposalStatus.Converted;
+    //     AddDomainEvent(new ProposalConvertedEvent
+    //     {
+    //         EventId = Guid.NewGuid(),
+    //         OccurredOn = DateTime.UtcNow,
+    //         ProposalId = Id,
+    //         ClientId = ClientId
+    //         // ClientId = ClientId
+    //     });
+    //     AddDomainEvent(CreatePropagateEvent());
+    // }
 
     public void UpdateAmount(Money newAmount)
     {
         if (ApprovedAmount == newAmount) return;
+        CanUpdateProposalAmount(newAmount.Amount);
         AddDomainEvent(new ProposalAmountUpdateEvent
         {
             EventId = Guid.NewGuid(),
@@ -124,14 +112,38 @@ public class Proposal : AggregateRoot
             EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
             ProposalId = Id,
-            ProposalClientId = ClientId,
-            ProposalStatus = ProposalStatus.ToString(),
+            // ProposalClientId = ClientId,
+            ProposalCreditCardId = CreditCardId,
+            ProposalStatus = Status.ToString(),
             ProposalApprovedAmount = ApprovedAmount.Amount,
             ProposalApprovedCurrency = ApprovedAmount.Currency,
-            ProposalRequested = Requested,
             ProposalCreatedAt = CreatedAt,
             ProposalUpdatedAt = UpdatedAt
         };
+    }
+
+    private bool CanUpdateProposalAmount(decimal newAmount)
+    {
+        if (newAmount < 0) throw new InvalidProposalUpdateException(newAmount);
+        return Status != ProposalStatus.Pending ? throw new InvalidProposalUpdateException(Status) : true;
+    }
+
+    private static readonly Dictionary<ProposalStatus, ProposalStatus[]> ValidTransitions =
+        new()
+        {
+            { ProposalStatus.Pending, [ProposalStatus.Approved, ProposalStatus.Rejected] },
+            { ProposalStatus.Approved, [] },
+            { ProposalStatus.Rejected, [] },
+            // { ProposalStatus.Converted, [] },
+        };
+
+    private void ValidateTransition(ProposalStatus newStatus)
+    {
+        if (!ValidTransitions.TryGetValue(Status, out var allowed))
+            throw new InvalidProposalStatusStateException(newStatus.ToString());
+
+        if (!allowed.Contains(newStatus))
+            throw new InvalidProposalStatusStateException(newStatus.ToString(), Status.ToString());
     }
 }
 
@@ -140,5 +152,5 @@ public enum ProposalStatus
     Pending,
     Approved,
     Rejected,
-    Canceled
+    // Converted
 }

@@ -60,8 +60,4 @@
         <None Remove="Outbox\Extension\**"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Consumer\"/>
-    </ItemGroup>
-
 </Project>

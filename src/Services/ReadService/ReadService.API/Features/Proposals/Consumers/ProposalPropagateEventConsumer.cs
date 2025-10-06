@@ -1,4 +1,4 @@
-﻿using BuildingBlocks.Events.Proposal;
+﻿using BuildingBlocks.Domain.Events.Proposal;
 using MassTransit;
 using ReadService.API.Features.Proposals.Models;
 using ReadService.API.Features.Proposals.Repository;
@@ -15,7 +15,7 @@ public class ProposalPropagateEventConsumer(IProposalRepository repository) : IC
         var proposalDocument = new ProposalDocument
         {
             Id = @event.ProposalId,
-            ClientId = @event.ProposalClientId,
+            CreditCardId = @event.ProposalCreditCardId,
             ProposalStatus = @event.ProposalStatus,
             ApprovedAmount = new MoneyDocument(@event.ProposalApprovedAmount, @event.ProposalApprovedCurrency),
             Requested = @event.ProposalRequested,

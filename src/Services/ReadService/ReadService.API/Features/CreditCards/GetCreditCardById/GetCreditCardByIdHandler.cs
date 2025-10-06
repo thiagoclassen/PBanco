@@ -8,8 +8,7 @@ public record GetCreditCardByIdQuery(Guid CreditCardId) : IQuery<ErrorOr<CreditC
 public record CreditCardResponse(
     Guid Id,
     Guid ClientId,
-    Guid ProposalId,
-    int Number,
+    int? Number,
     string ExpensesLimit,
     string CardProvider,
     string CardStatus);
@@ -22,9 +21,9 @@ public class GetCreditCardByIdQueryHandler(ICreditCardRepository repository)
     {
         var result = await repository.GetByIdAsync(query.CreditCardId, cancellationToken);
 
-        if (result is null) Error.NotFound("CreditCard.NotFound", "Credit card not found");
+        if (result is null) return Error.NotFound("CreditCard.NotFound", "Credit card not found");
 
-        return new CreditCardResponse(result!.Id, result.ClientId, result.ProposalId, result.Number,
+        return new CreditCardResponse(result!.Id, result.ClientId, result.Number,
             result.ExpensesLimit.ToString()!, result.CardProvider, result.CardStatus);
     }
 }

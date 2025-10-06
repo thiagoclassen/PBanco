@@ -1,4 +1,4 @@
-﻿using BuildingBlocks.Events.CreditCard;
+﻿using BuildingBlocks.Domain.Events.CreditCard;
 using MassTransit;
 using ReadService.API.Features.ClientCreditCardView.Repository;
 using ReadService.API.Features.CreditCards.Models;
@@ -20,7 +20,6 @@ public class CreditCardPropagateEventConsumer(
         {
             Id = @event.CreditCardId,
             ClientId = @event.CreditCardClientId,
-            ProposalId = @event.CreditCardProposalId,
             ExpensesLimit =
                 new MoneyDocument(@event.CreditCardExpensesLimitAmount, @event.CreditCardExpensesLimitCurrency),
             Number = @event.CreditCardNumber,

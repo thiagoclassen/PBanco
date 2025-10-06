@@ -1,4 +1,4 @@
-﻿using BuildingBlocks.Events;
+﻿using BuildingBlocks.Domain.Events;
 using BuildingBlocks.Outbox.Jobs;
 using BuildingBlocks.UnitOfWork;
 using MassTransit;

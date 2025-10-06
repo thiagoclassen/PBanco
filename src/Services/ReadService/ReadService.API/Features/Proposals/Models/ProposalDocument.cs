@@ -11,9 +11,9 @@ public class ProposalDocument
     [BsonRepresentation(BsonType.String)]
     public Guid Id { get; init; }
 
-    [BsonElement("clientId")]
+    [BsonElement("creditCardId")]
     [BsonRepresentation(BsonType.String)]
-    public Guid ClientId { get; init; }
+    public Guid CreditCardId { get; init; }
 
     [BsonElement("proposalStatus")]
     public string ProposalStatus { get; set; } = "Pending";

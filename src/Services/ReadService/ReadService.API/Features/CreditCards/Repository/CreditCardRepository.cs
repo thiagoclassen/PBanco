@@ -25,20 +25,6 @@ public class CreditCardRepository(MongoDbContext context) : ICreditCardRepositor
         return await _collection.Find(c => c.ClientId == clientId).ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<CreditCardDocument>> ListByProposalIdAsync(Guid proposalId,
-        CancellationToken cancellationToken)
-    {
-        return await _collection.Find(c => c.ProposalId == proposalId).ToListAsync(cancellationToken);
-    }
-
-    public async Task<IEnumerable<CreditCardDocument>> ListByClientIdAndProposalIdAsync(Guid clientId, Guid proposalId,
-        CancellationToken cancellationToken)
-    {
-        return await _collection.Find(c => c.ClientId == clientId && c.ProposalId == proposalId)
-            .ToListAsync(cancellationToken);
-    }
-
-
     public async Task InsertOrUpdateAsync(CreditCardDocument card, CancellationToken cancellationToken)
     {
         await _collection.ReplaceOneAsync(

@@ -4,7 +4,7 @@ using ReadService.API.Features.CreditCards.Repository;
 
 namespace ReadService.API.Features.CreditCards.ListCreditCards;
 
-public record ListCreditCardsQuery(Guid? ClientId, Guid? ProposalId)
+public record ListCreditCardsQuery(Guid? ClientId)
     : IQuery<ErrorOr<IEnumerable<CreditCardResponse>>>;
 
 public class ListCreditCardsQueryHandler(ICreditCardRepository repository)
@@ -13,20 +13,16 @@ public class ListCreditCardsQueryHandler(ICreditCardRepository repository)
     public async Task<ErrorOr<IEnumerable<CreditCardResponse>>> Handle(ListCreditCardsQuery query,
         CancellationToken cancellationToken)
     {
-        var response = (query.ClientId, query.ProposalId) switch
+        var response = (query.ClientId) switch
         {
-            (null, null) => await repository.ListAsync(cancellationToken),
-            (Guid clientId, Guid proposalId) => await repository.ListByClientIdAndProposalIdAsync(clientId,
-                proposalId, cancellationToken),
-            (Guid clientId, null) => await repository.ListByClientIdAsync(clientId, cancellationToken),
-            (null, Guid proposalId) => await repository.ListByProposalIdAsync(proposalId, cancellationToken)
+            (null) => await repository.ListAsync(cancellationToken),
+            (Guid clientId) => await repository.ListByClientIdAsync(clientId, cancellationToken)
         };
 
         return response
             .Select(c => new CreditCardResponse(
                 c!.Id,
                 c.ClientId,
-                c.ProposalId,
                 c.Number,
                 c.ExpensesLimit.ToString()!,
                 c.CardProvider,

@@ -28,13 +28,9 @@ public class ProposalConfiguration : IEntityTypeConfiguration<Models.Proposal>
             });
 
         builder
-            .Property(p => p.ProposalStatus)
+            .Property(p => p.Status)
             .HasConversion<string>()
             .HasMaxLength(25);
-
-        builder
-            .Property(x => x.Requested)
-            .HasDefaultValueSql("getdate()");
 
         builder
             .Property(p => p.CreatedAt)
