@@ -20,7 +20,7 @@ public class CancelProposalByClientDeletedCommandEventHandler(IUnitOfWork unitOf
             .Where(p => p.ClientId == command.ClientId && p.ProposalStatus != ProposalStatus.Canceled)
             .ToListAsync(cancellationToken);
 
-        foreach (var proposal in proposals) proposal.CancelWithoutEvent();
+        foreach (var proposal in proposals) proposal.CancelWithPropagateEvent();
 
         unitOfWork.Context.UpdateRange(proposals);
 

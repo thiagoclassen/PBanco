@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Domain;
+﻿using System.Text.Json;
+using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.Shared;
 using BuildingBlocks.Events.CreditCard;
 
@@ -60,13 +61,15 @@ public class CreditCard : AggregateRoot
             CardStatus = creditCard.CardStatus.ToString(),
             CardProvider = creditCard.CardProvider.ToString()
         });
+        
+        creditCard.AddDomainEvent(creditCard.CreatePropagateEvent());
 
         return creditCard;
     }
 
     public void Cancel()
     {
-        if (CardStatus == CardStatus.Cancelled) return;
+        if (CardStatus == CardStatus.Canceled) return;
         AddDomainEvent(new CreditCardCanceledEvent
         {
             EventId = Guid.NewGuid(),
@@ -74,7 +77,8 @@ public class CreditCard : AggregateRoot
             CreditCardId = Id,
             OldStatus = CardStatus.ToString()
         });
-        CardStatus = CardStatus.Cancelled;
+        CardStatus = CardStatus.Canceled;
+        AddDomainEvent(CreatePropagateEvent());
     }
 
     public void Block()
@@ -88,6 +92,7 @@ public class CreditCard : AggregateRoot
             OldStatus = CardStatus.ToString()
         });
         CardStatus = CardStatus.Blocked;
+        AddDomainEvent(CreatePropagateEvent());
     }
 
     public void Activate()
@@ -101,6 +106,26 @@ public class CreditCard : AggregateRoot
             OldStatus = CardStatus.ToString()
         });
         CardStatus = CardStatus.Active;
+        AddDomainEvent(CreatePropagateEvent());
+    }
+    
+    private CreditCardPropagateEvent CreatePropagateEvent()
+    {
+        return new CreditCardPropagateEvent
+        {
+            EventId = Guid.NewGuid(),
+            OccurredOn = DateTime.UtcNow,
+            CreditCardId = Id,
+            CreditCardClientId = ClientId,
+            CreditCardProposalId = ProposalId,
+            CreditCardExpensesLimitAmount = ExpensesLimit.Amount,
+            CreditCardExpensesLimitCurrency = ExpensesLimit.Currency,
+            CreditCardNumber = Number,
+            CardStatus = CardStatus.ToString(),
+            CardProvider = CardProvider.ToString(),
+            CreditCardCreatedAt = CreatedAt,
+            CreditCardUpdatedAt = UpdatedAt
+        };
     }
 }
 
@@ -109,7 +134,7 @@ public enum CardStatus
     Active,
     Inactive,
     Blocked,
-    Cancelled
+    Canceled
 }
 
 public enum CardProvider

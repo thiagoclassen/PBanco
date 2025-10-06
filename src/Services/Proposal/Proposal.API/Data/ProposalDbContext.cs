@@ -6,13 +6,9 @@ namespace ProposalApi.Data;
 
 public class ProposalDbContext : DbContext
 {
-    public ProposalDbContext()
-    {
-    }
+    public ProposalDbContext() { }
 
-    public ProposalDbContext(DbContextOptions<ProposalDbContext> options) : base(options)
-    {
-    }
+    public ProposalDbContext(DbContextOptions<ProposalDbContext> options) : base(options) { }
 
     public DbSet<Proposal.Models.Proposal> Proposals { get; init; }
     public DbSet<OutboxMessage> OutboxMessages { get; init; }

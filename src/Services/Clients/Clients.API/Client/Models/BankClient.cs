@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.Domain;
+﻿using System.Text.Json;
+using BuildingBlocks.Domain;
 using BuildingBlocks.Events.Client;
 
 namespace Clients.API.Client.Models;
@@ -33,6 +34,8 @@ public class BankClient : AggregateRoot
             OccurredOn = DateTime.UtcNow,
             ClientId = client.Id,
         });
+        
+        client.AddDomainEvent(client.CreatePropagateEvent());
 
         return client;
     }
@@ -48,5 +51,25 @@ public class BankClient : AggregateRoot
             ClientId = Id,
             OccurredOn = DateTime.UtcNow
         });
+        
+        AddDomainEvent(CreatePropagateEvent());
+    }
+    
+    private ClientPropagateEvent CreatePropagateEvent()
+    {
+        return new ClientPropagateEvent
+        {
+            EventId = Guid.NewGuid(),
+            OccurredOn = DateTime.UtcNow,
+            ClientId = Id,
+            ClientName = Name,
+            ClientEmail = Email,
+            ClientCPF = CPF,
+            ClientBirthDate = BirthDate,
+            ClientIsDeleted = IsDeleted,
+            ClientDeletedAt = DeletedAt,
+            ClientCreatedAt = CreatedAt,
+            ClientUpdatedAt = UpdatedAt
+        };
     }
 }
