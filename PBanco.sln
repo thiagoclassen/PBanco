@@ -12,7 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clients.API", "src\Services
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{508CB2A8-DD1E-445C-BE81-A275E3FDA57F}"
 	ProjectSection(SolutionItems) = preProject
-		src\compose.override.yaml = src\compose.override.yaml
 		src\compose.yaml = src\compose.yaml
 	EndProjectSection
 EndProject

@@ -23,10 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <Content Include="..\..\..\..\.dockerignore">
             <Link>.dockerignore</Link>
         </Content>
@@ -58,6 +54,10 @@
         <None Remove="Data\Interceptors\**"/>
         <None Remove="Outbox\Models\**"/>
         <None Remove="Outbox\Extension\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
     </ItemGroup>
 
 </Project>
