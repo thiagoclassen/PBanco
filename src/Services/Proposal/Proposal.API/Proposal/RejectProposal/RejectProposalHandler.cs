@@ -1,6 +1,5 @@
 ﻿using BuildingBlocks.CQRS;
 using ProposalApi.Proposal.Exceptions;
-using ProposalApi.Proposal.Models;
 using ProposalApi.Proposal.Persistence;
 
 namespace ProposalApi.Proposal.RejectProposal;
@@ -37,6 +36,7 @@ public class RejectProposalCommandHandler(IProposalRepository repository)
         }
 
 
-        return new RejectProposalResult(proposal.Id, proposal.CreditCardId, proposal.Status.ToString(), proposal.ApprovedAmount.ToString(),proposal.UpdatedAt);
+        return new RejectProposalResult(proposal.Id, proposal.CreditCardId, proposal.Status.ToString(),
+            proposal.ApprovedAmount.ToString(), proposal.UpdatedAt);
     }
 }

@@ -40,7 +40,7 @@ public class CreateClientEndpointTest
             CPF = clientRequest.CPF,
             BirthDate = clientRequest.BirthDate
         };
-        
+
         var clientResult = new CreateClientResult(clientId);
 
         var createClientResult = new CreateClientResult(clientId);

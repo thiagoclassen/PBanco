@@ -1,11 +1,10 @@
 ﻿using BuildingBlocks.CQRS;
 using ReadService.API.Features.Proposals.GetProposalById;
-using ReadService.API.Features.Proposals.Models;
 using ReadService.API.Features.Proposals.Repository;
 
 namespace ReadService.API.Features.Proposals.ListProposals;
 
-public record ListProposalsQuery() : IQuery<ErrorOr<IEnumerable<ProposalResponse>>>;
+public record ListProposalsQuery : IQuery<ErrorOr<IEnumerable<ProposalResponse>>>;
 
 public class ListProposalsQueryHandler(IProposalRepository repository)
     : IQueryHandler<ListProposalsQuery, ErrorOr<IEnumerable<ProposalResponse>>>

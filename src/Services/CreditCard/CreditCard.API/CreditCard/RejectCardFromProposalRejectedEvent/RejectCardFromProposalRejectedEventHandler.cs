@@ -1,6 +1,5 @@
 ﻿using BuildingBlocks.CQRS;
 using BuildingBlocks.UnitOfWork;
-using CreditCard.API.CreditCard.IssueCardFromProposalApprovedEvent;
 using MediatR;
 
 namespace CreditCard.API.CreditCard.RejectCardFromProposalRejectedEvent;
@@ -17,8 +16,8 @@ public class RejectCardFromProposalRejectedEventCommandHandler(
     {
         var card = await unitOfWork.Context.FindAsync<Models.CreditCard>([command.CreditCardId], cancellationToken);
 
-        if(card is null) throw new Exception("Card not found");
-        
+        if (card is null) throw new Exception("Card not found");
+
         card.RejectCard();
 
         unitOfWork.Context.Update(card);

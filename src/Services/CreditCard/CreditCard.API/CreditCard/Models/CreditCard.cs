@@ -7,6 +7,17 @@ namespace CreditCard.API.CreditCard.Models;
 
 public class CreditCard : AggregateRoot
 {
+    private static readonly Dictionary<CardStatus, CardStatus[]> ValidTransitions =
+        new()
+        {
+            { CardStatus.PendingApproval, [CardStatus.Inactive, CardStatus.Rejected, CardStatus.Canceled] },
+            { CardStatus.Rejected, [] },
+            { CardStatus.Inactive, [CardStatus.Active, CardStatus.Canceled] },
+            { CardStatus.Active, [CardStatus.Blocked, CardStatus.Canceled] },
+            { CardStatus.Blocked, [CardStatus.Active, CardStatus.Canceled] },
+            { CardStatus.Canceled, [] }
+        };
+
     public Guid Id { get; init; }
     public required Guid ClientId { get; init; }
     public Money ExpensesLimit { get; set; } = new(0);
@@ -22,7 +33,7 @@ public class CreditCard : AggregateRoot
         {
             Id = Guid.NewGuid(),
             ClientId = clientId,
-            ExpensesLimit = new(0m), // Default limit to 0
+            ExpensesLimit = new Money(0m), // Default limit to 0
             Number = null, // Card number to be assigned when Approved
             Status = CardStatus.PendingApproval, // New cards start as PendingApproval
             CardProvider = cardProvider,
@@ -57,7 +68,7 @@ public class CreditCard : AggregateRoot
         GenerateCardNumber();
         AddDomainEvent(CreatePropagateEvent());
     }
-    
+
     public void RejectCard()
     {
         ValidateTransition(CardStatus.Rejected);
@@ -141,17 +152,6 @@ public class CreditCard : AggregateRoot
             CreditCardUpdatedAt = UpdatedAt
         };
     }
-
-    private static readonly Dictionary<CardStatus, CardStatus[]> ValidTransitions =
-        new()
-        {
-            { CardStatus.PendingApproval, [CardStatus.Inactive, CardStatus.Rejected, CardStatus.Canceled] },
-            { CardStatus.Rejected, [] },
-            { CardStatus.Inactive, [CardStatus.Active, CardStatus.Canceled] },
-            { CardStatus.Active, [CardStatus.Blocked, CardStatus.Canceled] },
-            { CardStatus.Blocked, [CardStatus.Active, CardStatus.Canceled] },
-            { CardStatus.Canceled, [] }
-        };
 
     private void ValidateTransition(CardStatus newStatus)
     {

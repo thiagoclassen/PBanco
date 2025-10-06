@@ -28,6 +28,7 @@ public class CreateProposalCommandHandler(IProposalRepository repository)
             proposal.Status.ToString(),
             proposal.ApprovedAmount.ToString(),
             proposal.CreatedAt,
-            proposal.UpdatedAt);;
+            proposal.UpdatedAt);
+        ;
     }
 }

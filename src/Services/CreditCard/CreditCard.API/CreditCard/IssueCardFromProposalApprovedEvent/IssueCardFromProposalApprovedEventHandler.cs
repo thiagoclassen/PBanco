@@ -17,8 +17,8 @@ public class IssueCardFromProposalApprovedEventCommandHandler(
     {
         var card = await unitOfWork.Context.FindAsync<Models.CreditCard>([command.CreditCardId], cancellationToken);
 
-        if(card is null) throw new Exception("Card not found");
-        
+        if (card is null) throw new Exception("Card not found");
+
         card.IssueCardSetInactive(command.ApprovedAmount);
 
         unitOfWork.Context.Update(card);

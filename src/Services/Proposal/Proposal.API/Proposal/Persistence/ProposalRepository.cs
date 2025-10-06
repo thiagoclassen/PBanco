@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ProposalApi.Data;
+﻿using ProposalApi.Data;
 
 namespace ProposalApi.Proposal.Persistence;
 

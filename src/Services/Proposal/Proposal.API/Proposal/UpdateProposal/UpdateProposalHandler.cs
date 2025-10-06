@@ -31,7 +31,7 @@ public class UpdateProposalCommandHandler(IProposalRepository repository)
             proposal.UpdateAmount(new Money(command.Amount));
 
             await repository.UpdateAsync(proposal, cancellationToken);
-            
+
             response = new ProposalResponse(
                 proposal.Id,
                 proposal.CreditCardId,

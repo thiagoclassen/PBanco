@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.CQRS;
-using BuildingBlocks.Domain.Shared;
 using CreditCard.API.CreditCard.Models;
 using CreditCard.API.CreditCard.Persistence;
 using FluentValidation;
@@ -34,7 +33,7 @@ public class RequestCreditCardCommandHandler(ICreditCardRepository repository)
 
         return new RequestCreditCardResponse(creditCard.Id, creditCard.ClientId, creditCard.Status.ToString(),
             creditCard.CardProvider.ToString(), creditCard.Number, creditCard.ExpensesLimit.ToString(),
-            creditCard.UpdatedAt);;
+            creditCard.UpdatedAt);
     }
 }
 

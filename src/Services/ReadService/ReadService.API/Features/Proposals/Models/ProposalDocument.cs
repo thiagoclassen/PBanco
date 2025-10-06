@@ -4,7 +4,6 @@ using ReadService.API.Features.Shared;
 
 namespace ReadService.API.Features.Proposals.Models;
 
-
 public class ProposalDocument
 {
     [BsonId]
@@ -15,11 +14,9 @@ public class ProposalDocument
     [BsonRepresentation(BsonType.String)]
     public Guid CreditCardId { get; init; }
 
-    [BsonElement("proposalStatus")]
-    public string ProposalStatus { get; set; } = "Pending";
+    [BsonElement("proposalStatus")] public string ProposalStatus { get; set; } = "Pending";
 
-    [BsonElement("approvedAmount")]
-    public MoneyDocument ApprovedAmount { get; set; } = new(0);
+    [BsonElement("approvedAmount")] public MoneyDocument ApprovedAmount { get; set; } = new(0);
 
     [BsonElement("requested")]
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]

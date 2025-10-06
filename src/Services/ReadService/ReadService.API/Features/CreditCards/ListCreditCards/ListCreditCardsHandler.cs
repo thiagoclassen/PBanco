@@ -13,10 +13,10 @@ public class ListCreditCardsQueryHandler(ICreditCardRepository repository)
     public async Task<ErrorOr<IEnumerable<CreditCardResponse>>> Handle(ListCreditCardsQuery query,
         CancellationToken cancellationToken)
     {
-        var response = (query.ClientId) switch
+        var response = query.ClientId switch
         {
-            (null) => await repository.ListAsync(cancellationToken),
-            (Guid clientId) => await repository.ListByClientIdAsync(clientId, cancellationToken)
+            null => await repository.ListAsync(cancellationToken),
+            Guid clientId => await repository.ListByClientIdAsync(clientId, cancellationToken)
         };
 
         return response

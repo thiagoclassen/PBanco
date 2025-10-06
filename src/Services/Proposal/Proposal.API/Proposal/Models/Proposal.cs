@@ -7,9 +7,15 @@ namespace ProposalApi.Proposal.Models;
 
 public class Proposal : AggregateRoot
 {
-    public Guid Id { get; init; }
+    private static readonly Dictionary<ProposalStatus, ProposalStatus[]> ValidTransitions =
+        new()
+        {
+            { ProposalStatus.Pending, [ProposalStatus.Approved, ProposalStatus.Rejected] },
+            { ProposalStatus.Approved, [] },
+            { ProposalStatus.Rejected, [] }
+        };
 
-    // public required Guid ClientId { get; init; }
+    public Guid Id { get; init; }
     public required Guid CreditCardId { get; init; }
     public ProposalStatus Status { get; set; } = ProposalStatus.Pending;
     public Money ApprovedAmount { get; set; } = new(0.0m);
@@ -21,7 +27,6 @@ public class Proposal : AggregateRoot
         var proposal = new Proposal
         {
             Id = Guid.NewGuid(),
-            // ClientId = clientId,
             CreditCardId = creditCardId,
             Status = ProposalStatus.Pending,
             CreatedAt = DateTime.UtcNow,
@@ -34,7 +39,6 @@ public class Proposal : AggregateRoot
             OccurredOn = DateTime.UtcNow,
             ProposalId = proposal.Id,
             CreditCardId = proposal.CreditCardId,
-            // ClientId = proposal.ClientId,
             ProposalStatus = proposal.Status.ToString()
         });
         proposal.AddDomainEvent(proposal.CreatePropagateEvent());
@@ -53,7 +57,6 @@ public class Proposal : AggregateRoot
             OccurredOn = DateTime.UtcNow,
             ProposalId = Id,
             CreditCardId = CreditCardId,
-            // ClientId = ClientId,
             ApprovedAmount = ApprovedAmount
         });
         AddDomainEvent(CreatePropagateEvent());
@@ -69,25 +72,10 @@ public class Proposal : AggregateRoot
             OccurredOn = DateTime.UtcNow,
             ProposalId = Id,
             CreditCardId = CreditCardId
-            // ClientId = ClientId
         });
         AddDomainEvent(CreatePropagateEvent());
     }
 
-    // public void Convert()
-    // {
-    //     ValidateTransition(ProposalStatus.Converted);
-    //     Status = ProposalStatus.Converted;
-    //     AddDomainEvent(new ProposalConvertedEvent
-    //     {
-    //         EventId = Guid.NewGuid(),
-    //         OccurredOn = DateTime.UtcNow,
-    //         ProposalId = Id,
-    //         ClientId = ClientId
-    //         // ClientId = ClientId
-    //     });
-    //     AddDomainEvent(CreatePropagateEvent());
-    // }
 
     public void UpdateAmount(Money newAmount)
     {
@@ -112,7 +100,6 @@ public class Proposal : AggregateRoot
             EventId = Guid.NewGuid(),
             OccurredOn = DateTime.UtcNow,
             ProposalId = Id,
-            // ProposalClientId = ClientId,
             ProposalCreditCardId = CreditCardId,
             ProposalStatus = Status.ToString(),
             ProposalApprovedAmount = ApprovedAmount.Amount,
@@ -128,15 +115,6 @@ public class Proposal : AggregateRoot
         return Status != ProposalStatus.Pending ? throw new InvalidProposalUpdateException(Status) : true;
     }
 
-    private static readonly Dictionary<ProposalStatus, ProposalStatus[]> ValidTransitions =
-        new()
-        {
-            { ProposalStatus.Pending, [ProposalStatus.Approved, ProposalStatus.Rejected] },
-            { ProposalStatus.Approved, [] },
-            { ProposalStatus.Rejected, [] },
-            // { ProposalStatus.Converted, [] },
-        };
-
     private void ValidateTransition(ProposalStatus newStatus)
     {
         if (!ValidTransitions.TryGetValue(Status, out var allowed))
@@ -151,6 +129,5 @@ public enum ProposalStatus
 {
     Pending,
     Approved,
-    Rejected,
-    // Converted
+    Rejected
 }

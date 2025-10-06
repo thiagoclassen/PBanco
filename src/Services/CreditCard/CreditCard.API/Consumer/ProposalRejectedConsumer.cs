@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.Domain.Events.Proposal;
-using CreditCard.API.CreditCard.IssueCardFromProposalApprovedEvent;
 using CreditCard.API.CreditCard.RejectCardFromProposalRejectedEvent;
 using MassTransit;
 using MediatR;
