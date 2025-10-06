@@ -15,6 +15,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
+      <ProjectReference Include="..\..\CreditCard\CreditCard.API\CreditCard.API.csproj" />
     </ItemGroup>
 
     <ItemGroup>

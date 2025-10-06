@@ -13,6 +13,13 @@ public class ClientCreditCardViewRepository(MongoDbContext context) : IClientCre
     private readonly IMongoCollection<CreditCardDocument> _creditCards =
         context.GetCollection<CreditCardDocument>("CreditCards");
 
+    public async Task<ClientCreditCardViewDocument?> FindCreditCardViewByClientIdAsync(Guid clientId)
+    {
+        return await _collection
+            .Find(v => v.ClientId == clientId)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task UpsertClientAsync(Guid clientId, string name, DateTime birthDate)
     {
         var creditCards = await _creditCards

@@ -15,4 +15,9 @@ public class MoneyDocument
         Amount = amount;
         Currency = currency;
     }
+
+    public override string ToString()
+    {
+        return $"{Currency} {Amount:F2}";
+    }
 }

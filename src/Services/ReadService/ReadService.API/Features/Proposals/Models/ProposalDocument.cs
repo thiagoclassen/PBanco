@@ -19,7 +19,7 @@ public class ProposalDocument
     public string ProposalStatus { get; set; } = "Pending";
 
     [BsonElement("approvedAmount")]
-    public MoneyDocument ApprovedAmount { get; set; } = new MoneyDocument(0);
+    public MoneyDocument ApprovedAmount { get; set; } = new(0);
 
     [BsonElement("requested")]
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]

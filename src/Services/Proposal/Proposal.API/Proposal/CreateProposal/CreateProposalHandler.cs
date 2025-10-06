@@ -4,7 +4,7 @@ using ProposalApi.Proposal.Persistence;
 
 namespace ProposalApi.Proposal.CreateProposal;
 
-public record CreateProposalCommand(Guid ClientId, Money RequestedAmmount) : ICommand<ErrorOr<Models.Proposal>>;
+public record CreateProposalCommand(Guid ClientId) : ICommand<ErrorOr<Models.Proposal>>;
 
 public record CreateProposalResult(Guid Id);
 

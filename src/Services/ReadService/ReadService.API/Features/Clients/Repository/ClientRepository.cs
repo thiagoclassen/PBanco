@@ -8,9 +8,9 @@ public class ClientRepository(MongoDbContext context) : IClientRepository
 {
     private readonly IMongoCollection<ClientDocument> _collection = context.GetCollection<ClientDocument>("Clients");
 
-    public async Task<ClientDocument?> GetByIdAsync(Guid id)
+    public async Task<ClientDocument?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _collection.Find(c => c.Id == id).FirstOrDefaultAsync();
+        return await _collection.Find(c => c.Id == id).FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<ClientDocument>> GetAllAsync()

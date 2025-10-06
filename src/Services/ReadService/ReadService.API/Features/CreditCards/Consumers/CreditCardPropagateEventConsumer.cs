@@ -30,7 +30,7 @@ public class CreditCardPropagateEventConsumer(
             UpdatedAt = @event.CreditCardUpdatedAt
         };
         
-        await creditCardRepository.InsertOrUpdateAsync(clientDocument);
+        await creditCardRepository.InsertOrUpdateAsync(clientDocument, context.CancellationToken);
         await clientCreditCardViewRepository.UpsertCreditCardAsync(@event.CreditCardClientId);
     }
 }
