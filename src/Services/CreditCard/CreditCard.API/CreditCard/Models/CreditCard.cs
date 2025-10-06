@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using BuildingBlocks.Domain;
+﻿using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.Shared;
 using BuildingBlocks.Events.CreditCard;
 
@@ -61,7 +60,7 @@ public class CreditCard : AggregateRoot
             CardStatus = creditCard.CardStatus.ToString(),
             CardProvider = creditCard.CardProvider.ToString()
         });
-        
+
         creditCard.AddDomainEvent(creditCard.CreatePropagateEvent());
 
         return creditCard;
@@ -108,7 +107,7 @@ public class CreditCard : AggregateRoot
         CardStatus = CardStatus.Active;
         AddDomainEvent(CreatePropagateEvent());
     }
-    
+
     private CreditCardPropagateEvent CreatePropagateEvent()
     {
         return new CreditCardPropagateEvent

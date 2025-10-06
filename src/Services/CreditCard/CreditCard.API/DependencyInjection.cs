@@ -91,7 +91,7 @@ public static class DependencyInjection
                 });
 
                 cfg.ConfigureEndpoints(ctx, new KebabCaseEndpointNameFormatter(
-                    prefix: "credit-card-service",
+                    "credit-card-service",
                     false
                 ));
                 cfg.UseConsumeFilter(typeof(ProcessedEventFilter<>), ctx);
@@ -106,7 +106,7 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("Default");
         if (string.IsNullOrWhiteSpace(connectionString))
-            throw new InvalidOperationException($"Connection string is not configured.");
+            throw new InvalidOperationException("Connection string is not configured.");
 
         return connectionString;
     }

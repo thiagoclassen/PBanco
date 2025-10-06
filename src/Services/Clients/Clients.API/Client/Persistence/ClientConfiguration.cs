@@ -10,17 +10,17 @@ public class ClientConfiguration : IEntityTypeConfiguration<BankClient>
     {
         builder
             .ToTable("Clients", "bank");
-        
+
         builder
-            .HasQueryFilter(c=> !c.IsDeleted); // exclude soft-deleted records by default
-        
+            .HasQueryFilter(c => !c.IsDeleted); // exclude soft-deleted records by default
+
         builder
             .HasKey(x => x.Id);
-        
+
         builder
             .Property(p => p.CreatedAt)
             .HasDefaultValueSql("getdate()");
-        
+
         builder
             .Property(p => p.UpdatedAt)
             .HasDefaultValueSql("getdate()");

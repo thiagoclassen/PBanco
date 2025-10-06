@@ -1,8 +1,6 @@
 ﻿using BuildingBlocks.Events;
-using BuildingBlocks.Outbox;
 using BuildingBlocks.Outbox.Jobs;
 using BuildingBlocks.UnitOfWork;
-using CreditCard.API.Data;
 using MassTransit;
 
 namespace CreditCard.API.Outbox.Jobs;
@@ -19,7 +17,7 @@ internal sealed class ProcessOutboxJob(
 
         await unitOfWork.BeginTransactionAsync(cancellationToken);
 
-        var messages = await unitOfWork.Outbox.GetUnprocessedMessagesAsync(cancellationToken: cancellationToken);
+        var messages = await unitOfWork.Outbox.GetUnprocessedMessagesAsync(cancellationToken);
 
         messages.ForEach(message => logger.LogInformation("===> Processing message {MessageId}", message.Id));
 
@@ -28,7 +26,7 @@ internal sealed class ProcessOutboxJob(
             // Convert to concrete type otherwise the consumers will not be able to handle it
             var domainEvent = EventMapper.GetConcreteType(message.Type, message.Message);
             if (domainEvent is null) return;
-            
+
             await publishEndpoint.Publish(domainEvent, cancellationToken);
 
             message.ProcessedOn = DateTime.UtcNow;

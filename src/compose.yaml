@@ -34,7 +34,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-      
+  
   # Read API Service
   read.api:
     image: read.api
@@ -46,7 +46,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
     depends_on:
       pbanco.queue:
-        condition: service_healthy      
+        condition: service_healthy
   
   # Read Database
   read.db:
@@ -58,7 +58,7 @@ services:
       MONGO_INITDB_DATABASE: ReadServiceDb
     ports:
       - "27017:27017"
-    command: ["mongod", "--bind_ip_all"]
+    command: [ "mongod", "--bind_ip_all" ]
     healthcheck:
       test: [ "CMD", "mongo", "--username", "root", "--password", "pass", "--authenticationDatabase", "admin", "--eval", "db.adminCommand('ping')" ]
       interval: 10s
@@ -101,8 +101,8 @@ services:
     depends_on:
       pbanco.queue:
         condition: service_healthy
-      
-        
+  
+  
   # Proposal Database
   proposal.db:
     image: mcr.microsoft.com/mssql/server:2025-latest
@@ -126,7 +126,7 @@ services:
     depends_on:
       pbanco.queue:
         condition: service_healthy
-      
+  
   
   # Credit Card Database
   creditcard.db:

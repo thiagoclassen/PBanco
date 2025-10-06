@@ -1,11 +1,5 @@
-﻿using System.Text.Json;
-using BuildingBlocks.Domain;
-using BuildingBlocks.Events.Proposal;
-using BuildingBlocks.Outbox;
-using BuildingBlocks.ProcessedEvents.Models;
-using BuildingBlocks.UnitOfWork;
+﻿using BuildingBlocks.Events.Proposal;
 using CreditCard.API.CreditCard.CreateCreditCardFromProposalApprovedEvent;
-using CreditCard.API.Data;
 using MassTransit;
 using MediatR;
 
@@ -19,9 +13,9 @@ public class ProposalApprovedConsumer(
     {
         var command = new CreateCreditCardFromProposalApprovedCommand(
             context.Message.ProposalId,
-            context.Message.ClientId, 
+            context.Message.ClientId,
             context.Message.ApprovedAmount);
-        
+
         await sender.Send(command, context.CancellationToken);
     }
 }

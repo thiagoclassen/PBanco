@@ -152,7 +152,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"ClientId\":\"{{Client.Id}}\"    \r\n}",
+							"raw": "{\r\n    \"ClientId\":\"{{Client.Id}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -201,7 +201,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://{{url}}:{{proposalApiPort}}/api/proposals/?userId={{Client.Id}}",
+							"raw": "http://{{url}}:{{proposalApiPort}}/api/proposals/?clientId={{Client.Id}}",
 							"protocol": "http",
 							"host": [
 								"{{url}}"
@@ -214,7 +214,7 @@
 							],
 							"query": [
 								{
-									"key": "userId",
+									"key": "clientId",
 									"value": "{{Client.Id}}"
 								}
 							]
@@ -475,6 +475,32 @@
 								"credit-cards",
 								"{{creditCard.Id}}",
 								"cancel"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ClientCreditCard",
+			"item": [
+				{
+					"name": "GetClientCreditCardView",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{url}}:{{creditCardApiPort}}/api/client-credit-card-view/{{Client.Id}}",
+							"protocol": "http",
+							"host": [
+								"{{url}}"
+							],
+							"port": "{{creditCardApiPort}}",
+							"path": [
+								"api",
+								"client-credit-card-view",
+								"{{Client.Id}}"
 							]
 						}
 					},

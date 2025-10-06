@@ -11,12 +11,12 @@ public static class ClientMapping
     {
         return new CreateClientCommand(request.Name, request.Email, request.CPF, request.BirthDate);
     }
-    
+
     public static CreateClientResult MapToCreateClientResult(this BankClient client)
     {
         return new CreateClientResult(client.Id);
     }
-    
+
     public static BankClient MapToBankClient(this CreateClientCommand command)
     {
         return new BankClient
@@ -62,5 +62,4 @@ public static class ClientMapping
             request.CPF,
             request.BirthDate);
     }
-
 }

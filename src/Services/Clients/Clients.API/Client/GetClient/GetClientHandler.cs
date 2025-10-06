@@ -2,7 +2,6 @@
 using Clients.API.Client.Models;
 using Clients.API.Client.Persistence;
 
-
 namespace Clients.API.Client.GetClient;
 
 public record GetClientQuery(Guid ClientId) : IQuery<ErrorOr<BankClient?>>;

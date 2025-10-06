@@ -7,13 +7,9 @@ namespace Clients.API.Data;
 
 public class ClientDbContext : DbContext
 {
-    public ClientDbContext()
-    {
-    }
+    public ClientDbContext() { }
 
-    public ClientDbContext(DbContextOptions<ClientDbContext> options) : base(options)
-    {
-    }
+    public ClientDbContext(DbContextOptions<ClientDbContext> options) : base(options) { }
 
     public DbSet<BankClient> Clients { get; init; }
     public DbSet<OutboxMessage> OutboxMessages { get; init; }

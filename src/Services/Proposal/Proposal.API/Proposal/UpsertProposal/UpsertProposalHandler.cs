@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.CQRS;
-using BuildingBlocks.Outbox;
 using BuildingBlocks.UnitOfWork;
 
 namespace ProposalApi.Proposal.UpsertProposal;

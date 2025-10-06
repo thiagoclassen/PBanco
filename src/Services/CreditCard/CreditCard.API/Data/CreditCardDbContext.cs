@@ -6,13 +6,9 @@ namespace CreditCard.API.Data;
 
 public class CreditCardDbContext : DbContext
 {
-    public CreditCardDbContext()
-    {
-    }
+    public CreditCardDbContext() { }
 
-    public CreditCardDbContext(DbContextOptions<CreditCardDbContext> options) : base(options)
-    {
-    }
+    public CreditCardDbContext(DbContextOptions<CreditCardDbContext> options) : base(options) { }
 
     public DbSet<CreditCard.Models.CreditCard> CreditCards { get; init; }
     public DbSet<OutboxMessage> OutboxMessages { get; init; }

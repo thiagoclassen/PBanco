@@ -11,5 +11,8 @@ public sealed record Money
     public decimal Amount { get; init; }
     public string Currency { get; init; }
 
-    public override string ToString() => $"{Currency} {Amount:N2}";
+    public override string ToString()
+    {
+        return $"{Currency} {Amount:N2}";
+    }
 }

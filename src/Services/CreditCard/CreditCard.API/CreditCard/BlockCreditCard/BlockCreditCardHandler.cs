@@ -4,11 +4,14 @@ using CreditCard.API.CreditCard.Persistence;
 namespace CreditCard.API.CreditCard.BlockCreditCard;
 
 public record BlockCreditCardCommand(Guid CreditCardId) : ICommand<ErrorOr<BlockCreditCardResult>>;
+
 public record BlockCreditCardResult(Models.CreditCard CreditCard);
 
-public class BlockCreditCardCommandHandler(ICreditCardRepository repository) : ICommandHandler<BlockCreditCardCommand, ErrorOr<BlockCreditCardResult>>
+public class BlockCreditCardCommandHandler(ICreditCardRepository repository)
+    : ICommandHandler<BlockCreditCardCommand, ErrorOr<BlockCreditCardResult>>
 {
-    public async Task<ErrorOr<BlockCreditCardResult>> Handle(BlockCreditCardCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<BlockCreditCardResult>> Handle(BlockCreditCardCommand command,
+        CancellationToken cancellationToken)
     {
         var creditCard = await repository.GetCreditCardByIdAsync(command.CreditCardId, cancellationToken);
 

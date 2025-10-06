@@ -1,6 +1,5 @@
 ﻿using BuildingBlocks.Http;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ProposalApi.Proposal.ListProposals;
 

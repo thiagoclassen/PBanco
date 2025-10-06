@@ -10,7 +10,8 @@ public class OutboxRepository<TContext>(TContext dbContext) : IOutboxRepository
 
     public async Task<List<OutboxMessage>> GetUnprocessedMessagesAsync(CancellationToken cancellationToken)
     {
-        const string sql = $"select * from messaging.OutboxMessages WITH (UPDLOCK,ROWLOCK,READPAST) WHERE ProcessedOn IS NULL;";
+        const string sql =
+            "select * from messaging.OutboxMessages WITH (UPDLOCK,ROWLOCK,READPAST) WHERE ProcessedOn IS NULL;";
         return await _dbSet.FromSqlRaw(sql).ToListAsync(cancellationToken);
     }
 

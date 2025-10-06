@@ -2,8 +2,8 @@
 using Clients.API.Client.Models;
 using ErrorOr;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 
 namespace Clients.API.UnitTesting.Client.CreateClient;
@@ -23,8 +23,8 @@ public class CreateClientEndpointTest
     {
         // Arrange
         var clientId = Guid.NewGuid();
-        
-        var clientRequest = new CreateClientRequest()
+
+        var clientRequest = new CreateClientRequest
         {
             Name = "John Doe",
             Email = "johndoe@gmail.com",
@@ -32,7 +32,7 @@ public class CreateClientEndpointTest
             BirthDate = new DateTime(1990, 1, 1)
         };
 
-        var client = new BankClient()
+        var client = new BankClient
         {
             Id = clientId,
             Name = clientRequest.Name,
@@ -42,23 +42,23 @@ public class CreateClientEndpointTest
         };
 
         var createClientResult = new CreateClientResult(clientId);
-        
+
         _sender.Send(Arg.Any<CreateClientCommand>(), Arg.Any<CancellationToken>())
             .Returns(client.ToErrorOr());
         // Act
         var result = (CreatedResult)await _endpoint.CreateClient(clientRequest, CancellationToken.None);
-        
+
         // Assert
         var createClientResponse = (CreateClientResult)result.Value!;
         result.StatusCode.Should().Be(201);
         createClientResponse.ClientId.Should().Be(createClientResult.ClientId);
     }
-    
+
     [Fact]
     public async Task CreateClient_ShouldFail_WhenInvalidRequest()
     {
         // Arrange
-        var clientRequest = new CreateClientRequest()
+        var clientRequest = new CreateClientRequest
         {
             Name = "John Doe",
             Email = "johndoe@gmail.com",
@@ -71,8 +71,8 @@ public class CreateClientEndpointTest
         _sender.Send(Arg.Any<CreateClientCommand>(), Arg.Any<CancellationToken>())
             .Returns(Error.Validation().ToErrorOr<BankClient>());
         // Act
-        var result = (ObjectResult) await _endpoint.CreateClient(clientRequest, CancellationToken.None);
-        
+        var result = (ObjectResult)await _endpoint.CreateClient(clientRequest, CancellationToken.None);
+
         // Assert
 
         result.Value.Should().BeOfType<ValidationProblemDetails>();

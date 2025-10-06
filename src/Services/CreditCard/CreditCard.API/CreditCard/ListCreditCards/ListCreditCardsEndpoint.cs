@@ -1,6 +1,5 @@
 ﻿using BuildingBlocks.Http;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CreditCard.API.CreditCard.ListCreditCards;
 

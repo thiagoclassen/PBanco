@@ -1,6 +1,4 @@
 ﻿using BuildingBlocks.Behaviors;
-using BuildingBlocks.Events.Client;
-using BuildingBlocks.Outbox;
 using BuildingBlocks.Outbox.Interceptor;
 using BuildingBlocks.Outbox.Persistence;
 using BuildingBlocks.ProcessedEvents.Filter;
@@ -88,28 +86,28 @@ public static class DependencyInjection
                     h.Username(configuration["EventBus:UserName"]!);
                     h.Password(configuration["EventBus:Password"]!);
                 });
-                
+
                 cfg.UseMessageRetry(r => r.Immediate(3));
                 cfg.UseMessageRetry(r => r.Interval(1, TimeSpan.FromMinutes(1)));
 
                 cfg.ConfigureEndpoints(ctx, new KebabCaseEndpointNameFormatter(
-                    prefix: "credit-card-service",
+                    "credit-card-service",
                     false
                 ));
 
                 cfg.UseConsumeFilter(typeof(ProcessedEventFilter<>), ctx);
-                
+
                 cfg.UseJsonSerializer();
                 cfg.UseJsonDeserializer();
             });
         });
     }
-    
+
     private static string GetConnectionString(IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("Default");
         if (string.IsNullOrWhiteSpace(connectionString))
-            throw new InvalidOperationException($"Connection string is not configured.");
+            throw new InvalidOperationException("Connection string is not configured.");
 
         return connectionString;
     }

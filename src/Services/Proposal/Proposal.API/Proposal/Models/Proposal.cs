@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using BuildingBlocks.Domain;
+﻿using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.Shared;
 using BuildingBlocks.Events.Proposal;
 

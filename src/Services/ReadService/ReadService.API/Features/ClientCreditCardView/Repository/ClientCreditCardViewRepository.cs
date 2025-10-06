@@ -36,9 +36,9 @@ public class ClientCreditCardViewRepository(MongoDbContext context) : IClientCre
         };
 
         await _collection.ReplaceOneAsync(
-            filter: Builders<ClientCreditCardViewDocument>.Filter.Eq(v => v.ClientId, clientId),
-            replacement: view,
-            options: new ReplaceOptions { IsUpsert = true });
+            Builders<ClientCreditCardViewDocument>.Filter.Eq(v => v.ClientId, clientId),
+            view,
+            new ReplaceOptions { IsUpsert = true });
     }
 
     public async Task UpsertCreditCardAsync(Guid clientId)
@@ -57,8 +57,8 @@ public class ClientCreditCardViewRepository(MongoDbContext context) : IClientCre
         existingView.CreditCards = creditCards;
 
         await _collection.ReplaceOneAsync(
-            filter: Builders<ClientCreditCardViewDocument>.Filter.Eq(v => v.ClientId, clientId),
-            replacement: existingView,
-            options: new ReplaceOptions { IsUpsert = true });
+            Builders<ClientCreditCardViewDocument>.Filter.Eq(v => v.ClientId, clientId),
+            existingView,
+            new ReplaceOptions { IsUpsert = true });
     }
 }

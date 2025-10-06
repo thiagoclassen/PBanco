@@ -27,7 +27,7 @@ public class ClientPropagateEventConsumer(
             CreatedAt = @event.ClientCreatedAt,
             UpdatedAt = @event.ClientUpdatedAt
         };
-        
+
         await clientRepository.InsertOrUpdateAsync(clientDocument);
         await clientCreditCardViewRepository.UpsertClientAsync(
             @event.ClientId,

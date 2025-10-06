@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using ErrorOr;
+﻿using ErrorOr;
+using FluentValidation;
 using MediatR;
 
 namespace BuildingBlocks.Behaviors;

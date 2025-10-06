@@ -1,6 +1,4 @@
-﻿using BuildingBlocks.Domain.Shared;
-
-namespace ProposalApi.Proposal.CreateProposal;
+﻿namespace ProposalApi.Proposal.CreateProposal;
 
 public class CreateProposalRequest
 {

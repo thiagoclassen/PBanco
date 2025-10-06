@@ -33,5 +33,3 @@ public class ProposalDocument
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
     public DateTime UpdatedAt { get; set; }
 }
-
-

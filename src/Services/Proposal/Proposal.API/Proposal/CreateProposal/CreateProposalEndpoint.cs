@@ -1,5 +1,4 @@
-﻿using BuildingBlocks.Domain.Shared;
-using BuildingBlocks.Http;
+﻿using BuildingBlocks.Http;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +13,7 @@ public class CreateProposalEndpoint(ISender sender) : ApiController
     {
         var command = new CreateProposalCommand(request.ClientId);
         var result = await sender.Send(command, cancellationToken);
-        
+
         return result.Match(
             _ => Created($"/api/proposals/{result.Value.Id}", result.Value.MapToProposalResponse()),
             errors => Problem(errors)

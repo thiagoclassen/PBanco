@@ -1,5 +1,4 @@
 ﻿using BuildingBlocks.Http;
-using CreditCard.API.CreditCard;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +14,7 @@ public class ListCreditCardsEndpoint(ISender sender) : ApiController
     {
         var query = new ListCreditCardsQuery(clientId, proposalId);
         var result = await sender.Send(query, cancellationToken);
-        
+
         return result.Match(
             _ => Ok(result.Value),
             errors => Problem(errors));

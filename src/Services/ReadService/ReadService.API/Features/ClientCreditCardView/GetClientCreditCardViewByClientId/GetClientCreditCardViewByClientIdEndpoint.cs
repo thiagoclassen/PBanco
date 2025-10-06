@@ -11,9 +11,9 @@ public class GetClientCreditCardViewByClientIdEndpoint(ISender sender) : ApiCont
         CancellationToken cancellationToken)
     {
         var query = new GetCreditCardViewByClientIdQuery(clientId);
-        
+
         var result = await sender.Send(query, cancellationToken);
-        
+
         return result.Match(
             response => Ok(response),
             errors => Problem(errors));

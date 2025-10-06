@@ -1,10 +1,4 @@
 ﻿using BuildingBlocks.Behaviors;
-using BuildingBlocks.Outbox.Interceptor;
-using BuildingBlocks.Outbox.Jobs;
-using BuildingBlocks.Outbox.Persistence;
-using BuildingBlocks.ProcessedEvents.Filter;
-using BuildingBlocks.ProcessedEvents.Persistence;
-using BuildingBlocks.UnitOfWork;
 using FluentValidation;
 using MassTransit;
 using ReadService.API.Features.ClientCreditCardView.Repository;
@@ -42,7 +36,6 @@ public static class DependencyInjection
 
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-
         services.AddMassTransitLib(services.BuildServiceProvider().GetRequiredService<IConfiguration>());
         // services.AddHangfire();
 
@@ -74,7 +67,7 @@ public static class DependencyInjection
                 });
 
                 cfg.ConfigureEndpoints(ctx, new KebabCaseEndpointNameFormatter(
-                    prefix: "read-service",
+                    "read-service",
                     false
                 ));
 
@@ -103,7 +96,7 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("Default");
         if (string.IsNullOrWhiteSpace(connectionString))
-            throw new InvalidOperationException($"Connection string is not configured.");
+            throw new InvalidOperationException("Connection string is not configured.");
 
         return connectionString;
     }

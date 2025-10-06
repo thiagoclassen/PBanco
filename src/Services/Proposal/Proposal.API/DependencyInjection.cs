@@ -79,7 +79,7 @@ public static class DependencyInjection
                 cfg.UseConsumeFilter(typeof(ProcessedEventFilter<>), ctx);
 
                 cfg.ConfigureEndpoints(ctx, new KebabCaseEndpointNameFormatter(
-                    prefix: "proposal-service",
+                    "proposal-service",
                     false
                 ));
 
@@ -108,7 +108,7 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("Default");
         if (string.IsNullOrWhiteSpace(connectionString))
-            throw new InvalidOperationException($"Connection string is not configured.");
+            throw new InvalidOperationException("Connection string is not configured.");
 
         return connectionString;
     }

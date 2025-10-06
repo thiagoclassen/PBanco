@@ -2,7 +2,6 @@ using BuildingBlocks.Outbox.Extensions;
 using Clients.API;
 using Clients.API.Data;
 using Hangfire;
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +11,6 @@ builder.Services
     .AddPresentation()
     .AddInfrastructure()
     .AddApplication();
-
 
 
 var app = builder.Build();
