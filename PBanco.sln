@@ -13,6 +13,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{508CB2A8-DD1E-445C-BE81-A275E3FDA57F}"
 	ProjectSection(SolutionItems) = preProject
 		src\compose.yaml = src\compose.yaml
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1D00907F-BB71-49B9-9924-1D9448FFB321}"

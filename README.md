@@ -28,6 +28,8 @@ Microsserviços:
 
 ## Principais Componentes
 
+![](\Docs\Images\architecture-service.png)
+
 ### API Gateway
 Projeto dotnet utilizando YARP como proxy para fazer o roteamento das requisições de leitura para o serviço de leitura e as requisições de escrita para os serviços de domínio.
 
@@ -61,6 +63,8 @@ Contém as regras de negócio, persistência de dados, camada de aplicação, in
    - src/Services/Clients/Clients.API
    - src/Services/CreditCard/CreditCard.API
    - src/Services/Proposal/Proposal.API
+
+![](\Docs\Images\OutBox_Inbox.png)
 
 ### ReadService
 
