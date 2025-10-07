@@ -26,6 +26,63 @@ Microsserviços:
 3- Cartão de crédito; 
 ```
 
+## Regras definidas a partir da proposta
+
+- **Cadastro de clientes**:
+  - Nome, CPF, Data de Nascimento
+  - Validação de CPF (formato e unicidade)
+  - Validação de idade (maior que 18 anos)  
+
+- **Cartão de crédito**:
+  - Requisitado por cliente valido
+  - Quatro bandeiras (Visa, MasterCard, Elo e Amex)
+  - Começa no estado "Aguardando Aprovação"(PendingApproval)
+  - Requisição do cartão gera evento de cartão solicitado
+  - Quando a proposta de crédito é aprovada, o cartão passa para o estado "Inativo"(Inactive), que aguarda ação do cliente para ativação
+  - O número do cartão é gerado aleatoriamente no momento que a proposta é aprovada
+  - O cliente pode ativar o cartão, passando para o estado "Ativo"(Active)
+  - O cliente pode bloquear o cartão, passando para o estado "Bloqueado"(Blocked)
+  - O cliente pode desbloquear o cartão, voltando para o estado "Ativo"(Active)
+  - O cliente pode cancelar o cartão, passando para o estado "Cancelado"(Cancelled)
+  - Um cliente pode ter mais de um cartão
+  - Quando cliente é cancelado seus cartões também são cancelados
+
+![](/Docs/Images/card_state_flow.png)
+    
+- **Proposta de crédito**:
+  - Requisitado por cliente valido
+  - Status: Aprovada, Rejeitada, Pendente
+  - Começa no estado "Pendente"(Pending)
+  - A partir do Pendente, a proposta pode ser "Aprovada"(Approved) ou "Rejeitada"(Rejected)
+  - O valor da proposta é definido na aprovação
+  - Quando a proposta é aprovada, o cartão passa para o estado "Inativo"(Inactive)
+  - Quando a proposta é rejeitada, o cartão passa para o estado "Cancelado"(Cancelled)
+  - Proposta aprovada ou rejeitada não pode ser alterada
+  - Uma proposta pode ser utilizada para solicitar apenas um cartão
+  
+## Eventos
+
+ - **Cliente**:
+   - ClientCreatedEvent / ClientCriado : Emitido quando um cliente é criado.
+   - ClientCancelledEvent / ClientCancelado : Emitido quando um cliente é cancelado.
+   - ClientePropagateEvent / PropagarCliente : Emitido para propagar o estado do cliente para outros serviços.
+
+
+ - **Proposta**:
+   - ProposalCreatedEvent / ProposalCriada : Emitido quando uma proposta é criada.
+   - ProposalApprovedEvent / ProposalAprovada : Emitido quando uma proposta é aprovada.
+   - ProposalRejectedEvent / ProposalRejeitada : Emitido quando uma proposta é rejeitada.
+   - ProposalPropagateEvent / PropagarProposta : Emitido para propagar o estado da proposta para outros serviços.
+
+
+- **CreditCard**:
+   - CreditCardRequestedEvent / CartaoSolicitado : Emitido quando um cartão é solicitado.
+   - CreditCardActivatedEvent / CartaoAtivado : Emitido quando um cartão é ativado.
+   - CreditCardIssuedEvent / CartaoEmitido : Emitido quando um cartão é emitido (aprovado).
+   - CreditCardBlockedEvent / CartaoBloqueado : Emitido quando um cartão é bloqueado.   
+   - CreditCardCancelledEvent / CartaoCancelado : Emitido quando um cartão é cancelado.
+   - CreditCardPropagateEvent / PropagarCartao : Emitido para propagar o estado do cartão para outros serviços.
+
 ## Principais Componentes
 
 ![](Docs/Images/architecture-service.png)
